@@ -1,0 +1,16 @@
+UCP GTAWORLD V4.3 -> V4.4
+
+1. Ghi de cac file PHP/CSS/JS trong goi UPDATE ONLY vao thu muc UCP.
+2. Import: database/014_ucp_notifications.sql
+3. Dang xuat/dang nhap lai UCP.
+4. Test:
+   - Tao Master Account moi -> popup #TWOYEARS -> nut OK ve trang dang nhap.
+   - Dang nhap account moi -> icon chuong co thong bao dang ky som.
+   - Admin duyet character -> account nhan them thong bao duyet + reward.
+   - Bam OK popup duyet -> danh dau da doc + mo character.php.
+
+LUU Y QUAN TRONG:
+- V4.4 CHUA cap Faggio vao player_vehicles.
+- He thong chi ghi nhan quyen nhan 01 Faggio model 462 trong #TWOYEARS reward.
+- database/014_ucp_notifications.sql co backfill de account/reward V4.3 cu cung co thong bao.
+- app/functions.php co self-healing CREATE TABLE IF NOT EXISTS de notification khong lam UCP crash neu quen import migration; tuy nhien van nen import 014.

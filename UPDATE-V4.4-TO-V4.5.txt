@@ -1,0 +1,12 @@
+UCP GTAWORLD V4.4 -> V4.5
+
+1. Backup UCP V4.4 hien tai.
+2. Chep de cac file trong goi V4.5 UPDATE ONLY vao thu muc UCP.
+3. Import database/015_ucp_v45_notifications_rewards.sql vao database lsrp.
+4. Dang ky 1 Master Account moi de test auto-login + notification #TWOYEARS.
+5. Gui 1 ho so nhan vat -> kiem tra icon chuong co notification da gui ho so.
+6. Admin phe duyet -> kiem tra notification phe duyet va Faggio model 462 trong player_vehicles.
+7. Bam notification -> phai vao trang chi tiet notification.php?id=..., sau do moi bam nut xem nhan vat/ho so.
+
+V4.5 khong con popup reward tu dong bat sau khi dang ky hoac sau khi character duoc phe duyet.
+Starter Faggio #TWOYEARS chi cap 1 lan cho nhan vat dau tien duoc phe duyet cua Master Account.
