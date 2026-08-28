@@ -16,37 +16,51 @@ try {
 $charCount = count($characters);
 $freeSlots = max(0, (int)$GLOBALS['config']['max_characters'] - $charCount);
 $memberSince = current_account()['register_date'] ?? null;
+$totalWealth = 0;
+$totalVehicles = 0;
+$vehicleCounts = [];
+foreach ($characters as $character) {
+    $totalWealth += (int)($character['cash'] ?? 0) + (int)($character['bank'] ?? 0);
+    try {
+        $result = owned_vehicles_for_character((int)current_account_id(), (int)$character['character_id']);
+        $vehicleCounts[(int)$character['character_id']] = count($result['vehicles'] ?? []);
+        $totalVehicles += $vehicleCounts[(int)$character['character_id']];
+    } catch (Throwable $e) {
+        $vehicleCounts[(int)$character['character_id']] = 0;
+    }
+}
 
-$pageTitle = 'Trang chủ';
+$pageTitle = 'Tổng quan';
 require __DIR__ . '/partials/header.php';
 ?>
 <main class="page-shell">
-    <section class="hero dashboard-hero">
-        <div>
-            <div class="eyebrow">WELCOME BACK, <?= e(strtoupper((string)current_account()['username'])) ?></div>
-            <h1>Los Santos Roleplay<br><span>Vietnamese</span></h1>
-            <p>Master Account của bạn đang liên kết với <strong><?= $charCount ?>/<?= (int)$GLOBALS['config']['max_characters'] ?></strong> nhân vật.</p>
+    <section class="hero v5-dashboard-hero">
+        <div class="v5-dashboard-copy">
+            <span class="eyebrow">MASTER ACCOUNT · <?= e(strtoupper((string)current_account()['username'])) ?></span>
+            <h1>Chọn danh tính.<br><span>Tiếp tục câu chuyện.</span></h1>
+            <p>UCP quản lý từng nhân vật như một danh tính độc lập: skin hiện tại, kinh tế, công việc và phương tiện đều gắn với đúng Character ID.</p>
             <div class="hero-actions">
-                <a class="btn primary" href="<?= e(url('characters.php')) ?>">XEM NHÂN VẬT <span>→</span></a>
-                <a class="btn outline" href="<?= e(url('news.php')) ?>">TIN TỨC</a>
+                <a class="btn primary" href="<?= e(url('characters.php')) ?>">QUẢN LÝ NHÂN VẬT <span>→</span></a>
+                <a class="btn outline" href="<?= e(url('about.php')) ?>">GIỚI THIỆU LSRP</a>
             </div>
+            <div class="v5-account-line"><i class="v5-online-dot"></i><strong><?= e((string)current_account()['username']) ?></strong><span>Master Account #<?= (int)current_account_id() ?></span><span><?= $pending ?> hồ sơ chờ duyệt</span></div>
         </div>
-        <div class="hero-stamp">LOS SANTOS<br><strong>1992</strong></div>
+        <div class="v5-dashboard-art"><div class="v5-seal">IDENTITY PORTAL</div></div>
     </section>
 
     <section class="stat-grid">
-        <div class="stat-card"><span>NHÂN VẬT</span><strong><?= $charCount ?> <small>/ <?= (int)$GLOBALS['config']['max_characters'] ?></small></strong><p>Đang liên kết</p></div>
-        <div class="stat-card"><span>NHÂN VẬT CHƯA TẠO</span><strong><?= $freeSlots ?></strong><p>Có thể gửi hồ sơ mới</p></div>
-        <div class="stat-card"><span>NHÂN VẬT CHỜ DUYỆT</span><strong><?= $pending ?></strong><p>Character applications</p></div>
-        <div class="stat-card"><span>THÀNH VIÊN TỪ</span><strong class="small-value"><?= e($memberSince ? date('d/m/Y', strtotime($memberSince)) : '—') ?></strong><p>Master Account</p></div>
+        <div class="stat-card"><span>CHARACTER SLOTS</span><strong><?= $charCount ?> <small>/ <?= (int)$GLOBALS['config']['max_characters'] ?></small></strong><p>Danh tính đã liên kết</p></div>
+        <div class="stat-card"><span>TÀI SẢN PHƯƠNG TIỆN</span><strong><?= $totalVehicles ?></strong><p>Xe thuộc các nhân vật</p></div>
+        <div class="stat-card"><span>TỔNG TÀI CHÍNH</span><strong class="small-value"><?= e(money($totalWealth)) ?></strong><p>Cash + Bank của characters</p></div>
+        <div class="stat-card"><span>THÀNH VIÊN TỪ</span><strong class="small-value"><?= e($memberSince ? date('d/m/Y', strtotime($memberSince)) : '—') ?></strong><p><?= $freeSlots ?> slot còn trống</p></div>
     </section>
 
     <div class="section-heading">
-        <div><span class="eyebrow">CHARACTER SLOTS</span><h2>Nhân vật của bạn</h2></div>
-        <a class="section-link" href="<?= e(url('characters.php')) ?>">QUẢN LÝ TẤT CẢ →</a>
+        <div><span class="eyebrow">CHARACTER SELECTOR</span><h2>Nhân vật của bạn</h2></div>
+        <a class="section-link" href="<?= e(url('applications.php')) ?>">HỒ SƠ ĐÃ GỬI →</a>
     </div>
 
-    <section class="character-grid">
+    <section class="v5-character-grid">
         <?php for ($slot = 1; $slot <= (int)$GLOBALS['config']['max_characters']; $slot++): ?>
             <?php
             $character = null;
@@ -55,33 +69,26 @@ require __DIR__ . '/partials/header.php';
             }
             ?>
             <?php if ($character): ?>
-                <article class="character-card">
-                    <div class="slot-label">SLOT 0<?= $slot ?></div>
-                    <a class="skin-stage character-entry-link" href="<?= e(url('character.php?id=' . (int)$character['character_id'])) ?>" aria-label="Xem nhân vật <?= e(str_replace('_', ' ', $character['name'])) ?>">
+                <a class="v5-char-card" href="<?= e(url('character.php?id=' . (int)$character['character_id'])) ?>">
+                    <div class="v5-char-visual">
+                        <div class="v5-char-top"><span class="v5-char-slot">SLOT 0<?= $slot ?> · #<?= (int)$character['character_id'] ?></span><span class="v5-char-state"><i></i><?= (int)$character['character_created'] === 1 ? 'ACTIVE' : 'PENDING' ?></span></div>
                         <img src="<?= e(skin_url($character['skin'])) ?>" alt="Skin <?= (int)$character['skin'] ?>">
-                        <span class="entry-hover-label">XEM NHÂN VẬT →</span>
-                    </a>
-                    <div class="character-card-body">
-                        <span class="badge success"><?= (int)$character['character_created'] === 1 ? 'ACTIVE PROFILE' : 'CREATOR PENDING' ?></span>
+                    </div>
+                    <div class="v5-char-body">
+                        <small>CHARACTER IDENTITY</small>
                         <h3><?= e(str_replace('_', ' ', $character['name'])) ?></h3>
-                        <p>Level <?= (int)$character['level'] ?> · Skin <?= (int)$character['skin'] ?> · <?= e(job_name($character['job'] ?? 0)) ?></p>
-                        <a class="text-link" href="<?= e(url('character.php?id=' . (int)$character['character_id'])) ?>">MỞ HỒ SƠ <span>→</span></a>
+                        <div class="v5-char-metrics">
+                            <div><span>LEVEL</span><b><?= (int)$character['level'] ?></b></div>
+                            <div><span>SKIN</span><b>#<?= (int)$character['skin'] ?></b></div>
+                            <div><span>VEHICLES</span><b><?= (int)($vehicleCounts[(int)$character['character_id']] ?? 0) ?></b></div>
+                        </div>
+                        <div class="v5-char-footer"><span><?= e(job_name($character['job'] ?? 0)) ?></span><strong><?= e(money((int)($character['cash'] ?? 0) + (int)($character['bank'] ?? 0))) ?></strong></div>
                     </div>
-                </article>
+                </a>
             <?php else: ?>
-                <article class="character-card empty">
-                    <div class="slot-label">SLOT 0<?= $slot ?></div>
-                    <a class="empty-icon character-entry-link" href="<?= e(url('apply.php?slot=' . $slot)) ?>" aria-label="Tạo nhân vật tại slot <?= $slot ?>">
-                        <span>+</span>
-                        <small>TẠO NHÂN VẬT</small>
-                    </a>
-                    <div class="character-card-body">
-                        <span class="badge">EMPTY SLOT</span>
-                        <h3>TẠO NHÂN VẬT</h3>
-                        <p>Nhấn dấu + để chuyển thẳng sang hồ sơ tạo nhân vật.</p>
-                        <a class="text-link" href="<?= e(url('apply.php?slot=' . $slot)) ?>">GỬI YÊU CẦU <span>→</span></a>
-                    </div>
-                </article>
+                <a class="v5-char-card v5-empty-card" href="<?= e(url('apply.php?slot=' . $slot)) ?>">
+                    <div><div class="empty-icon"><span>+</span><small>SLOT 0<?= $slot ?></small></div><h3>Tạo nhân vật mới</h3><p>Khởi tạo một danh tính Roleplay mới và gửi hồ sơ để Ban quản trị xét duyệt.</p><span class="btn primary">TẠO HỒ SƠ <b>→</b></span></div>
+                </a>
             <?php endif; ?>
         <?php endfor; ?>
     </section>
