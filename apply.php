@@ -229,7 +229,7 @@ require __DIR__ . '/partials/header.php';
                     <label><span>Màu da</span>
                         <select name="skin_tone" required>
                             <option value="">Chọn màu da</option>
-                            <?php foreach ([0 => 'Sáng', 1 => 'Trung bình', 2 => 'Tối'] as $toneId => $toneName): ?>
+                            <?php foreach ([0 => 'Da trắng', 1 => 'Da vàng', 2 => 'Da đen'] as $toneId => $toneName): ?>
                                 <option value="<?= $toneId ?>" <?= (int)($_POST['skin_tone'] ?? -1) === $toneId ? 'selected' : '' ?>><?= e($toneName) ?></option>
                             <?php endforeach; ?>
                         </select>
