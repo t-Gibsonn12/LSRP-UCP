@@ -3,16 +3,21 @@ require __DIR__ . '/app/bootstrap.php';
 require_login();
 
 $pdo = db();
+$applicationsReady = ucp_ensure_character_applications_table();
+
 $stmt = $pdo->prepare("SELECT slot FROM player_characters WHERE account_id = ?");
 $stmt->execute([current_account_id()]);
 $usedSlots = array_map('intval', array_column($stmt->fetchAll(), 'slot'));
 
-try {
-    $stmt = $pdo->prepare("SELECT slot FROM character_applications WHERE account_id = ? AND status = 'pending'");
-    $stmt->execute([current_account_id()]);
-    $pendingSlots = array_map('intval', array_column($stmt->fetchAll(), 'slot'));
-} catch (Throwable $e) {
-    $pendingSlots = [];
+$pendingSlots = [];
+if ($applicationsReady) {
+    try {
+        $stmt = $pdo->prepare("SELECT slot FROM character_applications WHERE account_id = ? AND status = 'pending'");
+        $stmt->execute([current_account_id()]);
+        $pendingSlots = array_map('intval', array_column($stmt->fetchAll(), 'slot'));
+    } catch (Throwable $e) {
+        error_log('[LSRP UCP] Could not read pending character applications: ' . $e->getMessage());
+    }
 }
 
 $availableSlots = [];
@@ -33,47 +38,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $concept = trim((string)($_POST['concept'] ?? ''));
     $background = trim((string)($_POST['background'] ?? ''));
     $goal = trim((string)($_POST['roleplay_goal'] ?? ''));
+    $textLength = static fn(string $value): int => function_exists('mb_strlen')
+        ? mb_strlen($value, 'UTF-8')
+        : strlen($value);
 
+    if (!$applicationsReady) $errors[] = 'Hệ thống hồ sơ chưa sẵn sàng. Vui lòng báo Ban quản trị.';
     if (!in_array($slot, $availableSlots, true)) $errors[] = 'Slot này không còn khả dụng.';
     if (!valid_character_name($name)) $errors[] = 'Tên nhân vật phải theo dạng Firstname_Lastname, chỉ dùng chữ cái.';
-    if (mb_strlen($concept) < 30) $errors[] = 'Concept cần ít nhất 30 ký tự.';
-    if (mb_strlen($background) < 100) $errors[] = 'Background cần ít nhất 100 ký tự.';
-    if (mb_strlen($goal) < 50) $errors[] = 'Mục tiêu roleplay cần ít nhất 50 ký tự.';
+    if ($textLength($concept) < 30) $errors[] = 'Concept cần ít nhất 30 ký tự.';
+    if ($textLength($background) < 100) $errors[] = 'Background cần ít nhất 100 ký tự.';
+    if ($textLength($goal) < 50) $errors[] = 'Mục tiêu roleplay cần ít nhất 50 ký tự.';
 
-    if (!$errors) {
-        $stmt = $pdo->prepare("SELECT character_id FROM player_characters WHERE name = ? LIMIT 1");
-        $stmt->execute([$name]);
-        if ($stmt->fetch()) $errors[] = 'Tên nhân vật này đã tồn tại.';
-    }
+    try {
+        if (!$errors) {
+            $stmt = $pdo->prepare("SELECT character_id FROM player_characters WHERE name = ? LIMIT 1");
+            $stmt->execute([$name]);
+            if ($stmt->fetch()) $errors[] = 'Tên nhân vật này đã tồn tại.';
+        }
 
-    if (!$errors) {
-        $stmt = $pdo->prepare("SELECT application_id FROM character_applications WHERE character_name = ? AND status = 'pending' LIMIT 1");
-        $stmt->execute([$name]);
-        if ($stmt->fetch()) $errors[] = 'Tên nhân vật này đang có một hồ sơ chờ duyệt.';
-    }
+        if (!$errors) {
+            $stmt = $pdo->prepare("SELECT application_id FROM character_applications WHERE character_name = ? AND status = 'pending' LIMIT 1");
+            $stmt->execute([$name]);
+            if ($stmt->fetch()) $errors[] = 'Tên nhân vật này đang có một hồ sơ chờ duyệt.';
+        }
 
-    if (!$errors) {
-        $stmt = $pdo->prepare(
-            "INSERT INTO character_applications
-             (account_id, slot, character_name, concept, background, roleplay_goal, status)
-             VALUES (?, ?, ?, ?, ?, ?, 'pending')"
-        );
-        $stmt->execute([current_account_id(), $slot, $name, $concept, $background, $goal]);
-        $applicationId = (int)$pdo->lastInsertId();
+        if (!$errors) {
+            $stmt = $pdo->prepare(
+                "INSERT INTO character_applications
+                 (account_id, slot, character_name, concept, background, roleplay_goal, status)
+                 VALUES (?, ?, ?, ?, ?, ?, 'pending')"
+            );
+            $stmt->execute([current_account_id(), $slot, $name, $concept, $background, $goal]);
+            $applicationId = (int)$pdo->lastInsertId();
 
-        ucp_notification_create(
-            (int)current_account_id(),
-            'character_application_submitted',
-            'Đã gửi yêu cầu tạo nhân vật',
-            'Hồ sơ ' . str_replace('_', ' ', $name) . ' đã được gửi tới Ban quản trị và đang chờ phê duyệt.',
-            'applications.php',
-            'Xem nhân vật chờ duyệt',
-            'character-application-submitted-' . $applicationId,
-            ['application_id' => $applicationId, 'character_name' => $name, 'slot' => $slot]
-        );
+            ucp_notification_create(
+                (int)current_account_id(),
+                'character_application_submitted',
+                'Đã gửi yêu cầu tạo nhân vật',
+                'Hồ sơ ' . str_replace('_', ' ', $name) . ' đã được gửi tới Ban quản trị và đang chờ phê duyệt.',
+                'applications.php',
+                'Xem nhân vật chờ duyệt',
+                'character-application-submitted-' . $applicationId,
+                ['application_id' => $applicationId, 'character_name' => $name, 'slot' => $slot]
+            );
 
-        flash('success', 'Hồ sơ nhân vật đã được gửi tới Ban quản trị. Thông báo đã được lưu vào Notification Center.');
-        redirect('applications.php');
+            flash('success', 'Hồ sơ nhân vật đã được gửi tới Ban quản trị. Thông báo đã được lưu vào Notification Center.');
+            redirect('applications.php');
+        }
+    } catch (Throwable $e) {
+        error_log('[LSRP UCP] Character application submit failed: ' . $e->getMessage());
+        $errors[] = 'Không thể lưu hồ sơ lúc này. Vui lòng thử lại hoặc báo Ban quản trị.';
     }
 }
 
