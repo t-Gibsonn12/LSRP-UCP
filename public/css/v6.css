@@ -954,3 +954,25 @@ body:after{
     linear-gradient(180deg,rgba(10,18,33,.02),rgba(7,10,16,.42)),
     url("../media/lsrp-night.svg") right center / cover no-repeat!important;
 }
+
+
+/* Landing background — original bright Los Santos sunset */
+body:before{
+  background:
+    linear-gradient(180deg,rgba(8,13,24,.05) 0%,rgba(8,13,24,.32) 54%,rgba(5,8,14,.76) 100%),
+    url("../media/lsrp-los-santos-sunset.webp") center / cover no-repeat,
+    radial-gradient(circle at 12% 0%,rgba(239,70,81,.18),transparent 30%),
+    radial-gradient(circle at 82% 18%,rgba(53,158,220,.18),transparent 34%);
+  opacity:.94;
+}
+.public-hero{
+  background:
+    linear-gradient(90deg,rgba(8,15,27,.76) 0%,rgba(8,15,27,.46) 54%,rgba(8,15,27,.12) 100%),
+    linear-gradient(180deg,rgba(38,63,101,.08),rgba(7,11,18,.34)),
+    url("../media/lsrp-los-santos-sunset.webp") center / cover no-repeat!important;
+}
+.public-hero-art{
+  background:
+    linear-gradient(180deg,rgba(10,18,33,.05),rgba(7,10,16,.40)),
+    url("../media/lsrp-los-santos-sunset.webp") right center / cover no-repeat!important;
+}
