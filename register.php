@@ -92,7 +92,7 @@ require __DIR__ . '/partials/header.php';
 
     <section class="auth-panel">
         <div class="auth-panel-inner">
-            <a class="mini-brand" href="<?= e(url('login.php')) ?>"><span>LS</span><b>LOS SANTOS ROLEPLAY</b><small>USER CONTROL PANEL</small></a>
+            <a class="mini-brand" href="<?= e(url('login.php')) ?>"><span>LS</span><b>LOS SANTOS ROLEPLAY</b><small>SAMP · USER CONTROL PANEL</small></a>
             <div class="eyebrow">CREATE MASTER ACCOUNT</div>
             <h2>Tạo tài khoản.</h2>
             <p>Email được lưu ngay từ lúc đăng ký. Bản V4 chưa bật xác nhận email.</p>
