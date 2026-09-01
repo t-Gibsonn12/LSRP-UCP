@@ -32,6 +32,9 @@ if (is_logged_in()) {
 </head>
 <body class="<?= e($bodyClass) ?>">
 <div class="noise"></div>
+<?php if ($currentFile !== 'index.php'): ?>
+<a class="global-back <?= is_logged_in() ? 'global-back-app' : 'global-back-public' ?>" href="<?= e(url('index.php')) ?>" onclick="if (window.history.length > 1) { window.history.back(); return false; }" aria-label="Quay lại trang trước"><span>←</span><b>TRỞ VỀ</b></a>
+<?php endif; ?>
 
 <?php if (is_logged_in()): ?>
 <header class="topbar">
