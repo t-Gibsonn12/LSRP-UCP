@@ -877,10 +877,10 @@ input:focus,textarea:focus,select:focus{
 
 /* Global back button */
 .global-back{
-  position:fixed;
-  left:30px;
-  top:28px;
-  z-index:100;
+  position:fixed!important;
+  left:24px;
+  top:104px;
+  z-index:90;
   display:inline-flex;
   align-items:center;
   gap:9px;
@@ -888,11 +888,11 @@ input:focus,textarea:focus,select:focus{
   padding:0 14px 0 10px;
   border:1px solid rgba(255,255,255,.16);
   border-radius:999px;
-  background:rgba(7,11,18,.74);
+  background:rgba(7,11,18,.82);
   color:#e7edf5!important;
   font:800 9px/1 Inter,sans-serif;
   letter-spacing:.15em;
-  box-shadow:0 12px 28px rgba(0,0,0,.24);
+  box-shadow:0 12px 28px rgba(0,0,0,.28);
   backdrop-filter:blur(12px);
   transition:transform .2s ease,border-color .2s ease,background .2s ease;
 }
@@ -902,14 +902,12 @@ input:focus,textarea:focus,select:focus{
   line-height:0;
 }
 .global-back:hover{
-  transform:translateY(-2px);
+  transform:translateX(3px);
   border-color:rgba(255,118,101,.6);
-  background:rgba(31,19,27,.86);
+  background:rgba(31,19,27,.9);
 }
-.global-back-app{top:102px}
 @media(max-width:850px){
-  .global-back{left:18px;top:18px;height:36px}
-  .global-back-app{top:88px}
+  .global-back{left:16px;top:88px;height:36px}
 }
 
 

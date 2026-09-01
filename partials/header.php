@@ -3,7 +3,31 @@ $flashes = pull_flashes();
 $pageTitle = $pageTitle ?? $GLOBALS['config']['app_name'];
 $bodyClass = $bodyClass ?? '';
 $currentFile = basename($_SERVER['PHP_SELF'] ?? '');
-$isAdminPage = str_contains(str_replace('\\', '/', $_SERVER['PHP_SELF'] ?? ''), '/admin/');
+$scriptPath = trim(str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+$currentRoute = $scriptPath !== '' ? $scriptPath : $currentFile;
+$isAdminPage = str_contains($currentRoute, 'admin/');
+$defaultPublicBackTarget = is_logged_in() ? 'dashboard.php' : 'index.php';
+$backRoutes = [
+    'about.php' => 'index.php',
+    'news.php' => $defaultPublicBackTarget,
+    'news-view.php' => 'news.php',
+    'characters.php' => 'dashboard.php',
+    'character.php' => 'characters.php',
+    'apply.php' => 'characters.php',
+    'applications.php' => 'dashboard.php',
+    'account.php' => 'dashboard.php',
+    'notifications.php' => 'dashboard.php',
+    'notification.php' => 'notifications.php',
+    'support.php' => 'dashboard.php',
+    'twoyears.php' => 'dashboard.php',
+    'admin/applications.php' => 'admin/index.php',
+    'admin/application.php' => 'admin/applications.php',
+    'admin/characters.php' => 'admin/index.php',
+    'admin/character.php' => 'admin/characters.php',
+    'admin/news.php' => 'admin/index.php',
+    'admin/support.php' => 'admin/index.php',
+];
+$backTarget = $backRoutes[$currentRoute] ?? null;
 $account = current_account();
 $initial = $account ? strtoupper(mb_substr((string)$account['username'], 0, 1)) : 'LS';
 
@@ -32,8 +56,8 @@ if (is_logged_in()) {
 </head>
 <body class="<?= e($bodyClass) ?>">
 <div class="noise"></div>
-<?php if ($currentFile !== 'index.php'): ?>
-<a class="global-back <?= is_logged_in() ? 'global-back-app' : 'global-back-public' ?>" href="<?= e(url('index.php')) ?>" onclick="if (window.history.length > 1) { window.history.back(); return false; }" aria-label="Quay lại trang trước"><span>←</span><b>TRỞ VỀ</b></a>
+<?php if ($backTarget !== null): ?>
+<a class="global-back <?= is_logged_in() ? 'global-back-app' : 'global-back-public' ?>" href="<?= e(url($backTarget)) ?>" aria-label="Quay lại trang trước"><span>←</span><b>TRỞ VỀ</b></a>
 <?php endif; ?>
 
 <?php if (is_logged_in()): ?>
