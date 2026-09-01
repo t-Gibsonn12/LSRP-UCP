@@ -780,3 +780,69 @@ input:focus,textarea:focus,select:focus{
 @media (prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
 }
+
+/* V6 auth artwork — original LSRP gangster duo */
+.auth-story{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(8,11,20,.84) 0%,rgba(8,11,20,.38) 54%,rgba(8,11,20,.08) 100%),
+    linear-gradient(180deg,rgba(9,12,24,.08),rgba(9,12,24,.48)),
+    url("../media/lsrp-login-gangster-duo.webp") 67% center / cover no-repeat!important;
+}
+.auth-story:before{
+  background:
+    linear-gradient(0deg,rgba(5,8,14,.84),transparent 52%),
+    radial-gradient(circle at 76% 36%,rgba(255,131,77,.24),transparent 34%),
+    radial-gradient(circle at 25% 20%,rgba(54,213,255,.18),transparent 35%);
+}
+.auth-story-content{
+  position:relative;
+  z-index:2;
+}
+.auth-panel{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.auth-panel:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(239,70,81,.20),transparent 34%),
+    linear-gradient(135deg,transparent 58%,rgba(44,190,214,.06));
+}
+.auth-panel-inner{
+  position:relative;
+  z-index:1;
+}
+
+@media (max-width:850px){
+  .auth-panel{
+    display:block!important;
+    padding:0 24px 34px!important;
+    background:
+      linear-gradient(180deg,rgba(7,11,18,.08) 0,rgba(7,11,18,.54) 150px,rgba(7,11,18,.98) 298px),
+      url("../media/lsrp-login-gangster-duo.webp") 69% 0 / auto 300px no-repeat,
+      linear-gradient(160deg,rgba(20,29,42,.96),rgba(7,11,18,.99))!important;
+  }
+  .auth-panel:before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto;
+    height:300px;
+    z-index:0;
+    pointer-events:none;
+    background:linear-gradient(180deg,rgba(7,11,18,0) 0%,rgba(7,11,18,.04) 38%,rgba(7,11,18,.86) 100%);
+  }
+  .auth-panel:after{
+    z-index:0;
+    opacity:.30;
+  }
+  .auth-panel-inner{
+    padding-top:250px;
+  }
+}
