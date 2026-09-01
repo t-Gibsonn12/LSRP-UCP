@@ -58,7 +58,7 @@ require __DIR__ . '/partials/header.php';
 
     <section class="auth-panel">
         <div class="auth-panel-inner">
-            <a class="mini-brand" href="<?= e(url('login.php')) ?>"><span>LS</span><b>LOS SANTOS ROLEPLAY</b><small>USER CONTROL PANEL</small></a>
+            <a class="mini-brand" href="<?= e(url('login.php')) ?>"><span>LS</span><b>LOS SANTOS ROLEPLAY</b><small>SAMP · USER CONTROL PANEL</small></a>
             <div class="eyebrow">MASTER ACCOUNT</div>
             <h2>Chào mừng trở lại.</h2>
             <p>Đăng nhập bằng tài khoản chính đang sử dụng trên máy chủ.</p>
