@@ -86,8 +86,26 @@ require __DIR__ . '/partials/header.php';
                     </div>
                 </a>
             <?php else: ?>
-                <a class="v5-char-card v5-empty-card" href="<?= e(url('apply.php?slot=' . $slot)) ?>">
-                    <div><div class="empty-icon"><span>+</span><small>SLOT 0<?= $slot ?></small></div><h3>Tạo nhân vật mới</h3><p>Khởi tạo một danh tính Roleplay mới và gửi hồ sơ để Ban quản trị xét duyệt.</p><span class="btn primary">TẠO HỒ SƠ <b>→</b></span></div>
+                <?php
+                $emptySkin = $slot === 2 ? 105 : 12;
+                $emptyLabel = $slot === 2 ? 'STREET IDENTITY' : 'CITY IDENTITY';
+                ?>
+                <a class="v5-char-card v5-empty-card v5-empty-slot-<?= (int)$slot ?>" href="<?= e(url('apply.php?slot=' . $slot)) ?>">
+                    <div class="v5-char-visual v5-empty-visual">
+                        <div class="v5-char-top">
+                            <span class="v5-char-slot">CHARACTER 0<?= $slot ?></span>
+                            <span class="v5-char-state v5-char-state-empty"><i></i>AVAILABLE</span>
+                        </div>
+                        <span class="v5-empty-watermark">LSRP</span>
+                        <span class="v5-empty-tag">LOS SANTOS · 1992</span>
+                        <img src="<?= e(skin_url($emptySkin)) ?>" alt="Nhân vật gợi ý cho Character 0<?= $slot ?>" loading="lazy">
+                    </div>
+                    <div class="v5-char-body v5-empty-body">
+                        <small><?= e($emptyLabel) ?></small>
+                        <h3>Chưa có nhân vật</h3>
+                        <p>Viết nên một danh tính mới và bắt đầu câu chuyện của bạn tại Los Santos.</p>
+                        <span class="btn primary">TẠO HỒ SƠ <b>→</b></span>
+                    </div>
                 </a>
             <?php endif; ?>
         <?php endfor; ?>
