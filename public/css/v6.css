@@ -846,3 +846,54 @@ input:focus,textarea:focus,select:focus{
     padding-top:250px;
   }
 }
+
+
+/* Auth artwork cleanup — simplify the story panel */
+.auth-story{
+  background:
+    linear-gradient(90deg,rgba(8,11,20,.58) 0%,rgba(8,11,20,.22) 58%,rgba(8,11,20,.04) 100%),
+    linear-gradient(180deg,rgba(9,12,24,.04),rgba(9,12,24,.36)),
+    url("../media/lsrp-login-gangster-duo.webp") 80% center / cover no-repeat!important;
+}
+.auth-story:after,
+.city-grid:before,
+.city-grid:after{
+  display:none!important;
+}
+.city-grid{
+  opacity:.08!important;
+}
+.auth-story-content{
+  position:absolute;
+  left:42px;
+  right:auto;
+  bottom:38px;
+  width:min(380px,calc(100% - 84px));
+  max-width:none;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.15);
+  border-left:3px solid var(--v6-red-hot);
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(6,10,17,.82),rgba(6,10,17,.45));
+  backdrop-filter:blur(12px) saturate(120%);
+  box-shadow:0 18px 44px rgba(0,0,0,.24);
+}
+.auth-story-content h1,
+.auth-story-content .story-points,
+.auth-story-content .hot-news-card,
+.auth-story-content .register-rules{
+  display:none!important;
+}
+.auth-story-content .eyebrow{
+  margin:0 0 8px;
+  color:#ff907b!important;
+  font-size:9px;
+  letter-spacing:.18em;
+}
+.auth-story-content .story-copy{
+  margin:0;
+  max-width:none;
+  color:#e1e7ef!important;
+  font-size:14px;
+  line-height:1.6;
+}
