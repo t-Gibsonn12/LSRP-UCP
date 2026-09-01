@@ -37,7 +37,7 @@ if (is_logged_in()) {
 <header class="topbar">
     <a class="brand" href="<?= e(url('dashboard.php')) ?>" aria-label="Los Santos Roleplay UCP">
         <span class="brand-mark">LS</span>
-        <span class="brand-copy"><strong>LOS SANTOS</strong><small>ROLEPLAY · UCP V5</small></span>
+        <span class="brand-copy"><strong>LOS SANTOS</strong><small>SA-MP · ROLEPLAY UCP</small></span>
     </a>
 
     <button class="mobile-nav-toggle" type="button" data-mobile-nav aria-label="Mở menu" aria-expanded="false">☰</button>
