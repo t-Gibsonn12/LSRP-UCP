@@ -28,7 +28,7 @@ require __DIR__ . '/partials/header.php';
         <div class="auth-story-content">
             <div class="eyebrow">LOS SANTOS · SAN ANDREAS · 1992</div>
             <h1><span>#TWO</span><br>YEARS</h1>
-            <p class="story-copy">Two Years to back</p>
+            <p class="story-copy">Một thành phố. Hàng nghìn câu chuyện. Bắt đầu hành trình roleplay của bạn.</p>
 
             <div class="story-points">
                 <span><b>01</b> Master Account</span>
