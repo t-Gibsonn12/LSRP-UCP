@@ -28,11 +28,7 @@ if (is_logged_in()) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(url('public/css/app.css')) ?>">
     <link rel="stylesheet" href="<?= e(url('public/css/v5.css')) ?>">
-    <style>
-        /* Clean V5 surface: remove film grain and full-page grid overlays. */
-        .noise{display:none!important}
-        body:before{display:none!important}
-    </style>
+    <link rel="stylesheet" href="<?= e(url('public/css/v6.css')) ?>">
 </head>
 <body class="<?= e($bodyClass) ?>">
 <div class="noise"></div>
@@ -41,7 +37,7 @@ if (is_logged_in()) {
 <header class="topbar">
     <a class="brand" href="<?= e(url('dashboard.php')) ?>" aria-label="Los Santos Roleplay UCP">
         <span class="brand-mark">LS</span>
-        <span class="brand-copy"><strong>LOS SANTOS</strong><small>ROLEPLAY · UCP V5</small></span>
+        <span class="brand-copy"><strong>LOS SANTOS</strong><small>SA-MP · ROLEPLAY UCP</small></span>
     </a>
 
     <button class="mobile-nav-toggle" type="button" data-mobile-nav aria-label="Mở menu" aria-expanded="false">☰</button>

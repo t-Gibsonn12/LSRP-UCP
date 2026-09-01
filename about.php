@@ -8,7 +8,7 @@ require __DIR__ . '/partials/header.php';
 <nav class="public-nav" aria-label="Điều hướng công khai">
     <a class="public-brand" href="<?= e(url()) ?>">
         <span class="brand-mark">LS</span>
-        <span><strong>LOS SANTOS ROLEPLAY</strong><small>VIETNAMESE · UCP</small></span>
+        <span><strong>LOS SANTOS ROLEPLAY</strong><small>SA-MP · VIETNAMESE UCP</small></span>
     </a>
     <div class="public-links">
         <a href="<?= e(url()) ?>">Trang chủ</a>
