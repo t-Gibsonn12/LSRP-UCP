@@ -72,7 +72,7 @@ function gender_name(int|string|null $gender): string
 
 function skin_tone_name(int|string|null $tone): string
 {
-    return ['Sáng', 'Trung bình', 'Tối'][(int)$tone] ?? 'Chưa xác định';
+    return ['Da trắng', 'Da vàng', 'Da đen'][(int)$tone] ?? 'Chưa xác định';
 }
 
 function birthplace_name(int|string|null $place): string
