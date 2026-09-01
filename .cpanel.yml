@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/sqgvukhp/public_html/
+    - /bin/cp -R app $DEPLOYPATH
+    - /bin/cp -R admin $DEPLOYPATH
+    - /bin/cp -R partials $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp about.php account.php applications.php apply.php character.php characters.php dashboard.php forgot-password.php index.php login.php logout.php news-view.php news.php notification.php notifications.php register.php support.php twoyears-reward.php twoyears.php vehicles.php $DEPLOYPATH
