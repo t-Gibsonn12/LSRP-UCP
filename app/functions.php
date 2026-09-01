@@ -112,6 +112,73 @@ function valid_character_name(string $name): bool
     return (bool)preg_match('/^[A-Za-z]{2,}_[A-Za-z]{2,}$/', $name);
 }
 
+function ucp_ensure_character_applications_table(): bool
+{
+    static $ready = null;
+    if ($ready !== null) return $ready;
+
+    try {
+        $pdo = db();
+        $pdo->exec(
+            "CREATE TABLE IF NOT EXISTS character_applications (
+                application_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                account_id INT UNSIGNED NOT NULL,
+                slot TINYINT UNSIGNED NOT NULL,
+                character_name VARCHAR(25) NOT NULL,
+                concept VARCHAR(1000) NOT NULL,
+                background TEXT NOT NULL,
+                roleplay_goal TEXT NOT NULL,
+                status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+                admin_note TEXT NULL,
+                reviewed_by INT UNSIGNED NULL,
+                reviewed_at DATETIME NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (application_id),
+                KEY idx_character_applications_account (account_id),
+                KEY idx_character_applications_status (status),
+                KEY idx_character_applications_name (character_name)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+        );
+
+        // Repair only missing columns from older UCP installations.
+        $columns = [];
+        $stmt = $pdo->query("SHOW COLUMNS FROM character_applications");
+        foreach ($stmt->fetchAll() as $column) {
+            $columns[(string)$column['Field']] = true;
+        }
+
+        $missingColumns = [
+            'account_id' => "ALTER TABLE character_applications ADD COLUMN account_id INT UNSIGNED NULL",
+            'slot' => "ALTER TABLE character_applications ADD COLUMN slot TINYINT UNSIGNED NULL",
+            'character_name' => "ALTER TABLE character_applications ADD COLUMN character_name VARCHAR(25) NULL",
+            'concept' => "ALTER TABLE character_applications ADD COLUMN concept VARCHAR(1000) NULL",
+            'background' => "ALTER TABLE character_applications ADD COLUMN background TEXT NULL",
+            'roleplay_goal' => "ALTER TABLE character_applications ADD COLUMN roleplay_goal TEXT NULL",
+            'status' => "ALTER TABLE character_applications ADD COLUMN status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending'",
+            'admin_note' => "ALTER TABLE character_applications ADD COLUMN admin_note TEXT NULL",
+            'reviewed_by' => "ALTER TABLE character_applications ADD COLUMN reviewed_by INT UNSIGNED NULL",
+            'reviewed_at' => "ALTER TABLE character_applications ADD COLUMN reviewed_at DATETIME NULL",
+            'created_at' => "ALTER TABLE character_applications ADD COLUMN created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            'updated_at' => "ALTER TABLE character_applications ADD COLUMN updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+        ];
+
+        foreach ($missingColumns as $column => $sql) {
+            if (!isset($columns[$column])) {
+                $pdo->exec($sql);
+            }
+        }
+
+        $ready = true;
+    } catch (Throwable $e) {
+        error_log('[LSRP UCP] character application schema check failed: ' . $e->getMessage());
+        $ready = false;
+    }
+
+    return $ready;
+}
+
+
 function latest_hot_news(): ?array
 {
     try {
