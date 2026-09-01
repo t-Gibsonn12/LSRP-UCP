@@ -86,17 +86,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$locked['character_name']]);
             if ($stmt->fetch()) throw new RuntimeException('Tên nhân vật đã tồn tại.');
 
+            $gender = in_array((int)($locked['gender'] ?? 0), [0, 1], true) ? (int)$locked['gender'] : 0;
+            $birthDay = max(1, min(31, (int)($locked['birth_day'] ?? 1)));
+            $birthMonth = max(1, min(12, (int)($locked['birth_month'] ?? 1)));
+            $birthYear = (int)($locked['birth_year'] ?? 1970);
+            $birthPlace = in_array((int)($locked['birth_place'] ?? 0), [0, 1, 2, 3], true) ? (int)$locked['birth_place'] : 0;
+            $skinTone = in_array((int)($locked['skin_tone'] ?? 0), [0, 1, 2], true) ? (int)$locked['skin_tone'] : 0;
+            $heightCm = (int)($locked['height_cm'] ?? 0) ?: 170;
+            $weightKg = (int)($locked['weight_kg'] ?? 0) ?: 70;
+            $skin = (int)($locked['skin'] ?? 26);
+            if ($skin < 0 || $skin > 311) $skin = 26;
+
             $stmt = $pdo->prepare(
                 "INSERT INTO player_characters
-                (account_id, slot, name, skin, cash, bank, level, health, armour,
+                (account_id, slot, name, gender, birth_day, birth_month, birth_year, birth_place,
+                 skin_tone, height_cm, weight_kg, skin, cash, bank, level, health, armour,
                  pos_x, pos_y, pos_z, pos_a, interior_id, virtual_world, character_created)
-                VALUES (?, ?, ?, 26, 500, 0, 1, 100.0, 0.0,
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 500, 0, 1, 100.0, 0.0,
                         2495.3633, -1687.3105, 13.5156, 0.0, 0, 0, 0)"
             );
             $stmt->execute([
                 (int)$locked['account_id'],
                 (int)$locked['slot'],
-                $locked['character_name']
+                $locked['character_name'],
+                $gender,
+                $birthDay,
+                $birthMonth,
+                $birthYear,
+                $birthPlace,
+                $skinTone,
+                $heightCm,
+                $weightKg,
+                $skin
             ]);
             $characterId = (int)$pdo->lastInsertId();
 
@@ -225,9 +246,33 @@ require dirname(__DIR__) . '/partials/header.php';
             <span class="badge <?= e(application_status_class($app['status'])) ?>"><?= e(application_status_name($app['status'])) ?></span>
         </div>
 
-        <div class="review-section"><span>CHARACTER CONCEPT</span><p><?= nl2br(e($app['concept'])) ?></p></div>
-        <div class="review-section"><span>BACKGROUND</span><p><?= nl2br(e($app['background'])) ?></p></div>
-        <div class="review-section"><span>ROLEPLAY GOAL</span><p><?= nl2br(e($app['roleplay_goal'])) ?></p></div>
+        <div class="review-profile-grid">
+            <div class="review-section">
+                <span>THÔNG TIN CƠ BẢN</span>
+                <div class="review-data-grid">
+                    <div><small>Giới tính</small><strong><?= e(gender_name($app['gender'] ?? 0)) ?></strong></div>
+                    <div><small>Ngày sinh</small><strong><?= sprintf('%02d/%02d/%04d', (int)($app['birth_day'] ?? 1), (int)($app['birth_month'] ?? 1), (int)($app['birth_year'] ?? 1970)) ?></strong></div>
+                    <div><small>Nơi sinh</small><strong><?= e(birthplace_name($app['birth_place'] ?? 0)) ?></strong></div>
+                    <div><small>Quốc tịch</small><strong><?= e($app['nationality'] ?? '—') ?></strong></div>
+                    <div><small>Màu da</small><strong><?= e(skin_tone_name($app['skin_tone'] ?? 0)) ?></strong></div>
+                    <div><small>Nghề nghiệp</small><strong><?= e($app['occupation'] ?? '—') ?></strong></div>
+                    <div><small>Thể trạng</small><strong><?= (int)($app['height_cm'] ?? 0) ?> cm · <?= (int)($app['weight_kg'] ?? 0) ?> kg</strong></div>
+                </div>
+            </div>
+            <div class="review-skin-card">
+                <img src="<?= e(skin_url((int)($app['skin'] ?? 26))) ?>" alt="Skin nhân vật">
+                <div><span>SKIN MODEL</span><strong>#<?= (int)($app['skin'] ?? 26) ?></strong></div>
+            </div>
+        </div>
+
+        <div class="review-section"><span>TÍNH CÁCH</span><p><?= nl2br(e($app['personality'] ?? 'Chưa cung cấp.')) ?></p></div>
+        <div class="review-two-columns">
+            <div class="review-section"><span>ĐIỂM MẠNH</span><p><?= nl2br(e($app['strengths'] ?? 'Chưa cung cấp.')) ?></p></div>
+            <div class="review-section"><span>ĐIỂM YẾU</span><p><?= nl2br(e($app['weaknesses'] ?? 'Chưa cung cấp.')) ?></p></div>
+        </div>
+        <div class="review-section"><span>KHÁI QUÁT NHÂN VẬT</span><p><?= nl2br(e($app['concept'] ?? '')) ?></p></div>
+        <div class="review-section"><span>TIỂU SỬ NHÂN VẬT</span><p><?= nl2br(e($app['background'] ?? '')) ?></p></div>
+        <div class="review-section"><span>MỤC TIÊU ROLEPLAY</span><p><?= nl2br(e($app['roleplay_goal'] ?? '')) ?></p></div>
 
         <?php if ($app['status'] === 'pending'): ?>
         <form method="post" class="review-actions">
