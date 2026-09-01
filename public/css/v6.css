@@ -1,0 +1,782 @@
+/* LSRP UCP V6 — cinematic Los Santos roleplay layer */
+:root{
+  --v6-bg:#06080d;
+  --v6-bg-soft:#0a0f18;
+  --v6-panel:rgba(14,19,29,.82);
+  --v6-panel-solid:#101722;
+  --v6-panel-deep:#090d15;
+  --v6-line:rgba(255,255,255,.105);
+  --v6-line-soft:rgba(255,255,255,.065);
+  --v6-text:#f7f8fb;
+  --v6-muted:#929cad;
+  --v6-dim:#667184;
+  --v6-red:#ef4651;
+  --v6-red-hot:#ff7665;
+  --v6-gold:#e5b56d;
+  --v6-cyan:#84cbd4;
+  --v6-green:#46d39c;
+  --v6-shadow:0 30px 90px rgba(0,0,0,.42);
+  --v6-radius:20px;
+}
+
+html{background:var(--v6-bg);scroll-behavior:smooth}
+body{
+  position:relative;
+  isolation:isolate;
+  overflow-x:hidden;
+  background:var(--v6-bg);
+  color:var(--v6-text);
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(5,7,13,.08) 0%,rgba(5,7,13,.44) 48%,rgba(5,7,13,.98) 100%),
+    url("../media/lsrp-night.svg") top center / min(1600px,100%) auto no-repeat,
+    radial-gradient(circle at 12% 0%,rgba(239,70,81,.16),transparent 30%),
+    radial-gradient(circle at 88% 12%,rgba(76,108,167,.12),transparent 28%);
+  background-color:var(--v6-bg);
+  opacity:.78;
+}
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,transparent 34%,rgba(2,4,8,.6) 100%),
+    linear-gradient(90deg,rgba(5,7,12,.24),transparent 24%,transparent 76%,rgba(5,7,12,.3));
+}
+.noise{
+  z-index:0!important;
+  opacity:.035!important;
+  mix-blend-mode:screen;
+}
+a,button{ -webkit-tap-highlight-color:transparent}
+::selection{background:rgba(239,70,81,.36);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#070a10}
+::-webkit-scrollbar-thumb{background:#2d3748;border:2px solid #070a10;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:#e24a54}
+
+/* Header / navigation */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:70;
+  height:82px;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  background:rgba(7,10,16,.72)!important;
+  border-bottom:1px solid rgba(255,255,255,.11)!important;
+  backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:0 18px 55px rgba(0,0,0,.24);
+}
+.topbar:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(239,70,81,.82) 28%,rgba(255,186,111,.55) 52%,rgba(239,70,81,.7) 72%,transparent);
+  opacity:.7;
+}
+.brand{position:relative;z-index:1}
+.brand-mark{
+  position:relative;
+  overflow:hidden;
+  border-radius:12px!important;
+  background:linear-gradient(145deg,#ff675d 0%,#d52e3b 42%,#761326 100%)!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  box-shadow:0 12px 32px rgba(232,54,69,.28),inset 0 1px rgba(255,255,255,.28);
+}
+.brand-mark:after{
+  content:"";
+  position:absolute;
+  width:62px;
+  height:10px;
+  top:2px;
+  left:-16px;
+  transform:rotate(-42deg);
+  background:rgba(255,255,255,.25);
+  filter:blur(1px);
+}
+.brand-copy strong{letter-spacing:.16em;color:#fff}
+.brand-copy small{color:#a3adbb}
+.desktop-nav{gap:4px}
+.desktop-nav a{
+  border-radius:10px!important;
+  color:#9da7b5;
+  letter-spacing:.08em;
+  transition:color .2s ease,background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.desktop-nav a:hover{background:rgba(255,255,255,.055)!important;border-color:rgba(255,255,255,.08);transform:translateY(-1px)}
+.desktop-nav a.active{
+  color:#fff!important;
+  background:linear-gradient(135deg,rgba(239,70,81,.22),rgba(239,70,81,.045))!important;
+  border-color:rgba(239,70,81,.34)!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035),0 8px 24px rgba(239,70,81,.08);
+}
+.desktop-nav a.active:after{left:14px;right:14px;height:2px;border-radius:99px;box-shadow:0 0 16px rgba(255,93,88,.8)}
+.account-trigger,.notification-trigger,.twoyears-top-icon{
+  border-radius:12px!important;
+  border-color:rgba(255,255,255,.11)!important;
+  background:rgba(255,255,255,.045)!important;
+  transition:.2s ease;
+}
+.account-trigger:hover,.account-menu.open .account-trigger,
+.notification-trigger:hover,.notification-menu.open .notification-trigger,
+.twoyears-top-icon:hover,.twoyears-top-icon.active{
+  border-color:rgba(239,70,81,.45)!important;
+  background:rgba(239,70,81,.12)!important;
+}
+.account-avatar{
+  border-radius:11px!important;
+  background:linear-gradient(145deg,#232f40,#111722)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  color:#fff;
+}
+.account-trigger-copy b{color:#f4f6fa}
+.account-trigger-copy small{color:#8290a2}
+.account-chevron{color:#a9b3c1}
+.account-dropdown,.notification-dropdown{
+  border-radius:16px!important;
+  border-color:rgba(255,255,255,.14)!important;
+  background:rgba(9,13,21,.96)!important;
+  box-shadow:var(--v6-shadow)!important;
+  overflow:hidden;
+}
+.account-dropdown-head,.notification-dropdown-head{background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.012))!important}
+.account-dropdown>a:hover,.notification-item:hover .notification-item-inner{background:linear-gradient(90deg,rgba(239,70,81,.12),rgba(255,255,255,.025))!important}
+
+/* Shared surface system */
+.page-shell{
+  position:relative;
+  z-index:1;
+  width:min(1320px,calc(100% - 48px));
+  padding:48px 0 94px;
+}
+.page-shell:before{
+  content:"";
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:18px;
+  height:180px;
+  z-index:-1;
+  pointer-events:none;
+  background:radial-gradient(ellipse,rgba(239,70,81,.12),transparent 67%);
+  filter:blur(14px);
+}
+.hero,.public-hero,.about-hero,.article,.application-review{
+  border-color:rgba(255,255,255,.13)!important;
+  box-shadow:var(--v6-shadow);
+}
+.hero,.public-hero,.about-hero{
+  background:
+    linear-gradient(110deg,rgba(13,18,28,.94),rgba(7,10,16,.76)),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.6;
+  background:
+    linear-gradient(90deg,transparent,rgba(255,255,255,.025) 50%,transparent),
+    repeating-linear-gradient(0deg,transparent 0 44px,rgba(255,255,255,.025) 45px);
+}
+.hero>*{position:relative;z-index:1}
+.eyebrow{
+  color:var(--v6-red-hot)!important;
+  font-size:10px;
+  letter-spacing:.2em;
+}
+.hero h1,.page-heading h1,.section-heading h2{letter-spacing:-1.5px}
+.hero h1 span,.public-hero-copy h1 span,.about-hero h1 span{color:var(--v6-red-hot)!important;text-shadow:0 0 28px rgba(239,70,81,.16)}
+.hero p,.page-heading p{color:#a0aaba}
+.page-heading{margin-bottom:30px}
+.page-heading h1{font-size:44px}
+.section-heading{position:relative}
+.section-heading:after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-9px;
+  width:74px;
+  height:2px;
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--v6-red),transparent);
+}
+.section-heading .section-link{position:relative;z-index:1}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:#aab4c1!important;transition:.2s ease}
+.back-link:hover{color:#fff!important;transform:translateX(-3px)}
+
+/* Buttons */
+.btn{
+  position:relative;
+  overflow:hidden;
+  min-height:42px;
+  border-radius:11px!important;
+  padding:12px 18px;
+  border-color:rgba(255,255,255,.13)!important;
+  letter-spacing:.12em;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease;
+}
+.btn:after{
+  content:"";
+  position:absolute;
+  top:-90%;
+  bottom:-90%;
+  left:-30%;
+  width:24%;
+  transform:rotate(24deg) translateX(-260%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);
+  transition:transform .65s ease;
+}
+.btn:hover:after{transform:rotate(24deg) translateX(650%)}
+.btn.primary{
+  background:linear-gradient(135deg,#fb5960,#bc2435)!important;
+  border-color:rgba(255,151,135,.68)!important;
+  box-shadow:0 14px 34px rgba(213,44,60,.26),inset 0 1px rgba(255,255,255,.2);
+}
+.btn.primary:hover{transform:translateY(-3px)!important;box-shadow:0 20px 42px rgba(213,44,60,.34)}
+.btn.outline{
+  background:rgba(255,255,255,.045)!important;
+  border-color:rgba(255,255,255,.17)!important;
+}
+.btn.outline:hover{border-color:rgba(255,181,126,.6)!important;background:rgba(255,255,255,.09)!important;transform:translateY(-3px)}
+
+/* Cards / stats / lists */
+.stat-grid{margin-top:24px;gap:16px}
+.stat-card,.character-row,.character-card,.v5-char-card,.table-panel,.detail-card,.panel-form,.account-form,.news-card,.support-ticket,.admin-ticket,.notification-center-card,.notification-detail-card,.twoyears-account-card,.twoyears-benefits-card,.twoyears-status-card{
+  border-color:rgba(255,255,255,.115)!important;
+  box-shadow:0 18px 52px rgba(0,0,0,.2);
+}
+.stat-card{
+  min-height:132px;
+  padding:23px 22px;
+  border-radius:17px!important;
+  background:
+    linear-gradient(145deg,rgba(26,35,49,.9),rgba(12,17,26,.88))!important;
+}
+.stat-card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:3px;
+  height:46px;
+  background:linear-gradient(var(--v6-red-hot),transparent);
+  opacity:.85;
+}
+.stat-card>span{color:#9aa7b6!important}
+.stat-card strong{font-size:28px;text-shadow:0 8px 24px rgba(0,0,0,.3)}
+.stat-card p{color:#7f8c9e!important}
+.character-row{
+  min-height:132px;
+  border-radius:17px!important;
+  overflow:hidden;
+  background:
+    linear-gradient(110deg,rgba(20,28,40,.93),rgba(10,15,23,.9))!important;
+}
+.character-row:hover{
+  transform:translateY(-4px)!important;
+  border-color:rgba(239,70,81,.42)!important;
+  box-shadow:0 24px 56px rgba(0,0,0,.34),0 0 0 1px rgba(239,70,81,.07);
+}
+.row-skin{height:130px;background:radial-gradient(circle at 50% 20%,rgba(239,70,81,.2),transparent 55%),#0a1019!important}
+.row-main h2{font-size:24px}
+.row-main p{color:#8f9bac!important}
+.row-meta span{color:#78869a!important}
+.arrow{color:#e96b6b;transition:.2s}
+.character-row:hover .arrow{transform:translateX(5px);color:#fff}
+.v5-char-card{
+  background:
+    linear-gradient(155deg,rgba(20,28,40,.94),rgba(8,12,19,.96))!important;
+  border-radius:22px!important;
+  box-shadow:0 18px 52px rgba(0,0,0,.24);
+}
+.v5-char-card:hover{border-color:rgba(239,70,81,.46)!important;box-shadow:0 30px 75px rgba(0,0,0,.42),0 0 0 1px rgba(239,70,81,.08)}
+.v5-char-visual{
+  background:
+    linear-gradient(180deg,rgba(13,20,31,.18),rgba(5,8,14,.72)),
+    url("../media/lsrp-night.svg") center 38% / cover no-repeat!important;
+}
+.v5-char-visual:before{color:rgba(255,255,255,.08)!important}
+.v5-char-body{background:linear-gradient(180deg,rgba(12,17,26,.2),rgba(7,10,16,.86))}
+.v5-char-metrics div,.v5-overview-stat,.v5-world-grid div,.v5-vehicle-metrics div{
+  border-color:rgba(255,255,255,.1)!important;
+  background:rgba(7,11,18,.62)!important;
+  transition:.2s ease;
+}
+.v5-char-card:hover .v5-char-metrics div{border-color:rgba(239,70,81,.22)!important}
+.badge{
+  border-radius:999px!important;
+  padding:7px 10px;
+  background:rgba(255,255,255,.055)!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
+.badge.success{box-shadow:0 0 22px rgba(70,211,156,.08)}
+.empty-state{
+  border-radius:18px!important;
+  border-color:rgba(255,255,255,.14)!important;
+  background:linear-gradient(145deg,rgba(20,28,40,.72),rgba(8,12,19,.82))!important;
+  box-shadow:var(--v6-shadow);
+}
+.empty-state h2{font-size:28px}
+
+/* Dashboard / character identity */
+.v5-dashboard-hero{
+  min-height:430px;
+  background:
+    linear-gradient(90deg,rgba(9,14,22,.98) 0%,rgba(9,14,22,.82) 47%,rgba(9,14,22,.33) 100%),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+}
+.v5-dashboard-copy{padding:58px 58px}
+.v5-dashboard-copy h1{font-size:clamp(52px,6.2vw,86px);text-shadow:0 12px 40px rgba(0,0,0,.36)}
+.v5-dashboard-art{
+  min-height:430px;
+  border-left-color:rgba(255,255,255,.13)!important;
+  background:
+    linear-gradient(180deg,rgba(8,12,19,.18),rgba(8,12,19,.7)),
+    url("../media/lsrp-night.svg") right center / cover no-repeat!important;
+}
+.v5-dashboard-art:after{
+  content:"LIVE · LOS SANTOS";
+  position:absolute;
+  left:24px;
+  top:24px;
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  color:#ffd4a0;
+  font:800 9px Inter,sans-serif;
+  letter-spacing:.15em;
+  background:rgba(5,8,14,.4);
+  backdrop-filter:blur(8px);
+}
+.v5-dashboard-art .v5-seal{
+  color:#ff9585;
+  border-color:rgba(255,133,120,.5);
+  background:rgba(6,9,15,.42);
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.24);
+}
+.v5-profile-hero{
+  position:relative;
+  background:
+    linear-gradient(100deg,rgba(16,23,35,.97),rgba(7,10,16,.78)),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+  border-radius:26px!important;
+  box-shadow:var(--v6-shadow);
+}
+.v5-profile-copy{padding:58px}
+.v5-profile-copy h1{font-size:clamp(54px,6.3vw,88px);text-shadow:0 12px 42px rgba(0,0,0,.42)}
+.v5-profile-portrait{
+  background:
+    linear-gradient(180deg,rgba(8,12,19,.08),rgba(8,12,19,.82)),
+    url("../media/lsrp-night.svg") right center / cover no-repeat!important;
+}
+.v5-profile-portrait:before{opacity:.52}
+.v5-side-card,.v5-main-card{
+  border-color:rgba(255,255,255,.11)!important;
+  background:linear-gradient(145deg,rgba(18,26,38,.88),rgba(8,12,19,.9))!important;
+  box-shadow:0 18px 52px rgba(0,0,0,.23);
+}
+.v5-side-card{border-radius:18px!important}
+.v5-main-card{border-radius:20px!important}
+.v5-dl div{border-bottom-color:rgba(255,255,255,.08)!important}
+.v5-dl dt,.v5-world-grid small{color:#8794a7!important}
+.v5-dl dd{color:#f3f6fa}
+.v5-overview-stat strong{color:#fff;text-shadow:0 6px 18px rgba(0,0,0,.34)}
+.v5-vehicle-card{border-color:rgba(255,255,255,.11)!important;border-radius:18px!important;background:rgba(7,11,18,.62)!important}
+.v5-vehicle-image{background:#070c14!important}
+.v5-vehicle-head h3{font-size:27px}
+.v5-plate{border-radius:7px!important;box-shadow:0 4px 12px rgba(0,0,0,.25),inset 0 0 0 1px rgba(255,255,255,.55)}
+
+/* Public landing / about */
+.public-page{background:transparent}
+.public-page>.footer{display:none}
+.public-nav{
+  position:relative;
+  z-index:2;
+  width:min(1320px,calc(100% - 48px));
+  height:92px;
+  border-bottom-color:rgba(255,255,255,.13)!important;
+}
+.public-nav:after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-1px;
+  width:140px;
+  height:2px;
+  background:linear-gradient(90deg,var(--v6-red),transparent);
+}
+.public-brand .brand-mark{border-radius:12px!important}
+.public-links>a:not(.btn){color:#a4afbe!important;transition:.2s}
+.public-links>a:not(.btn):hover{color:#fff!important;transform:translateY(-1px)}
+.public-hero{
+  position:relative;
+  min-height:690px;
+  border-radius:30px!important;
+  background:
+    linear-gradient(90deg,rgba(9,14,22,.98) 0%,rgba(9,14,22,.79) 52%,rgba(9,14,22,.24) 100%),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+}
+.public-hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 72% 38%,rgba(239,70,81,.16),transparent 24%),
+    linear-gradient(0deg,rgba(7,10,16,.66),transparent 45%);
+}
+.public-hero-copy{padding:82px 70px}
+.public-hero-copy h1{font-size:clamp(64px,8.3vw,116px);line-height:.86;text-shadow:0 18px 52px rgba(0,0,0,.46)}
+.public-hero-copy>p{max-width:650px;color:#b1bac7!important;font-size:15px}
+.public-hero-art{
+  position:relative;
+  border-left-color:rgba(255,255,255,.13)!important;
+  background:
+    linear-gradient(180deg,rgba(7,10,16,.12),rgba(7,10,16,.72)),
+    url("../media/lsrp-night.svg") right center / cover no-repeat!important;
+}
+.public-hero-art:before{opacity:.07!important;color:#fff!important}
+.public-hero-art:after{color:rgba(255,255,255,.86)!important;text-shadow:0 8px 25px rgba(0,0,0,.4)}
+.public-scan{opacity:.7;mix-blend-mode:screen}
+.public-content{padding:104px 0}
+.public-section-head h2{font-size:clamp(40px,5vw,64px);text-shadow:0 8px 28px rgba(0,0,0,.3)}
+.public-section-head p{color:#9aa6b7!important}
+.public-feature,.about-pillar,.about-flow div{
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(255,255,255,.115)!important;
+  border-radius:18px!important;
+  background:linear-gradient(145deg,rgba(20,29,42,.84),rgba(8,12,19,.86))!important;
+  box-shadow:0 18px 48px rgba(0,0,0,.22);
+  transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease;
+}
+.public-feature:after,.about-pillar:after{
+  content:"";
+  position:absolute;
+  right:-30px;
+  bottom:-50px;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(239,70,81,.2),transparent 68%);
+  pointer-events:none;
+}
+.public-feature:hover,.about-pillar:hover,.about-flow div:hover{
+  transform:translateY(-5px);
+  border-color:rgba(239,70,81,.36)!important;
+  box-shadow:0 28px 66px rgba(0,0,0,.34);
+}
+.public-feature>span{border-radius:12px!important;background:linear-gradient(145deg,rgba(239,70,81,.22),rgba(239,70,81,.05))!important;color:#ff9a84!important}
+.public-feature h3,.about-pillar h3{font-size:28px}
+.public-feature p,.about-pillar p,.about-flow span{color:#929eaf!important}
+.about-hero{
+  min-height:390px;
+  border-radius:30px!important;
+  background:
+    linear-gradient(100deg,rgba(11,16,25,.95),rgba(7,10,16,.74)),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+}
+.about-hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(239,70,81,.08),transparent 55%);
+  pointer-events:none;
+}
+.about-hero>*{position:relative;z-index:1}
+.about-hero:after{color:rgba(255,255,255,.035)!important}
+.about-flow b{color:#586679!important}
+
+/* Auth experience */
+.auth-page{background:var(--v6-bg)}
+.auth-shell{
+  position:relative;
+  z-index:1;
+  width:min(1480px,100%);
+  min-height:calc(100vh - 38px);
+  margin:19px auto;
+  padding:0 24px;
+  grid-template-columns:minmax(0,1.2fr) minmax(410px,.8fr);
+  gap:0;
+}
+.auth-story{
+  min-height:calc(100vh - 76px);
+  border:1px solid rgba(255,255,255,.13);
+  border-right:0;
+  border-radius:28px 0 0 28px;
+  background:
+    linear-gradient(95deg,rgba(8,13,21,.82),rgba(8,13,21,.36)),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+  box-shadow:var(--v6-shadow);
+}
+.auth-story:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(0deg,rgba(5,8,14,.82),transparent 45%),
+    radial-gradient(circle at 18% 68%,rgba(239,70,81,.2),transparent 30%);
+}
+.auth-story:after{
+  color:rgba(255,255,255,.055)!important;
+  text-shadow:0 16px 50px rgba(0,0,0,.35);
+}
+.city-grid{
+  opacity:.18!important;
+  background-size:48px 48px!important;
+  mix-blend-mode:screen;
+}
+.city-grid:before{
+  content:"LSRP";
+  position:absolute;
+  left:7%;
+  top:8%;
+  color:rgba(255,255,255,.11);
+  font:700 clamp(90px,13vw,220px)/.8 Oswald,sans-serif;
+  letter-spacing:-.08em;
+}
+.city-grid:after{
+  content:"SAN ANDREAS  ·  LOS SANTOS  ·  1992";
+  position:absolute;
+  right:7%;
+  top:12%;
+  color:rgba(255,220,170,.72);
+  font:800 9px Inter,sans-serif;
+  letter-spacing:.22em;
+}
+.auth-story-content{max-width:760px}
+.auth-story h1{font-size:clamp(72px,7vw,112px);text-shadow:0 18px 55px rgba(0,0,0,.5)}
+.auth-story h1 span{color:var(--v6-red-hot)!important}
+.story-copy{color:#b5c0ce!important;font-size:15px}
+.story-points{gap:12px}
+.story-points span{
+  padding:9px 13px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  background:rgba(7,11,18,.35);
+  backdrop-filter:blur(7px);
+  color:#bdc6d2!important;
+}
+.story-points b{color:#ff937b!important}
+.hot-news-card{
+  border-radius:16px!important;
+  border-color:rgba(255,255,255,.16)!important;
+  border-left:3px solid var(--v6-red)!important;
+  background:rgba(7,11,18,.66)!important;
+  box-shadow:0 18px 56px rgba(0,0,0,.28);
+  backdrop-filter:blur(12px);
+  transition:.24s ease;
+}
+.hot-news-card:hover{transform:translateY(-4px);border-color:rgba(255,144,122,.48)!important}
+.hot-news-card h2{font-size:22px}
+.auth-panel{
+  min-height:calc(100vh - 76px);
+  border:1px solid rgba(255,255,255,.13);
+  border-left:1px solid rgba(255,255,255,.08);
+  border-radius:0 28px 28px 0;
+  background:
+    linear-gradient(160deg,rgba(20,29,42,.96),rgba(7,11,18,.97))!important;
+  box-shadow:var(--v6-shadow);
+}
+.auth-panel-inner{width:min(450px,100%)}
+.mini-brand{margin-bottom:70px}
+.mini-brand span{border-radius:10px!important;background:linear-gradient(145deg,#ff675d,#8b1925)!important;box-shadow:0 10px 26px rgba(239,70,81,.2)}
+.mini-brand b{color:#f6f8fb}
+.mini-brand small{color:#8290a2!important}
+.auth-panel h2{font-size:38px;text-shadow:0 8px 25px rgba(0,0,0,.32)}
+.auth-panel-inner>p{color:#9aa6b7!important}
+.auth-form{gap:18px}
+.auth-form label small{color:#8290a2!important}
+input,textarea,select{
+  border-radius:11px!important;
+  border-color:rgba(255,255,255,.14)!important;
+  background:rgba(5,9,15,.66)!important;
+  color:#f7f8fb!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+input::placeholder,textarea::placeholder{color:#5f6c7f}
+input:focus,textarea:focus,select:focus{
+  border-color:rgba(255,113,101,.72)!important;
+  box-shadow:0 0 0 4px rgba(239,70,81,.12),0 10px 28px rgba(0,0,0,.18)!important;
+}
+.auth-register-box{
+  padding:18px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:15px;
+  background:rgba(5,9,15,.3);
+}
+
+/* Tables, forms, support and notices */
+.table-panel,.detail-card,.panel-form,.account-form,.application-review,.article,.admin-ticket,.support-ticket,.notification-detail-card,.notification-center-card,.twoyears-benefits-card,.twoyears-status-card{
+  border-radius:19px!important;
+  background:linear-gradient(145deg,rgba(18,26,38,.9),rgba(7,11,18,.92))!important;
+}
+.table-head{background:rgba(7,11,18,.78)!important;color:#8996a8!important}
+.table-row{border-top-color:rgba(255,255,255,.08)!important}
+.table-row:hover{background:rgba(239,70,81,.06)!important}
+.admin-note,.admin-ticket-message{border-color:rgba(255,255,255,.1)!important;background:rgba(5,9,15,.5)!important}
+.filter-tabs a{
+  border-radius:999px!important;
+  border-color:rgba(255,255,255,.12)!important;
+  background:rgba(255,255,255,.04)!important;
+}
+.filter-tabs a.active{
+  color:#fff!important;
+  border-color:rgba(239,70,81,.42)!important;
+  background:rgba(239,70,81,.14)!important;
+  box-shadow:0 8px 24px rgba(239,70,81,.1);
+}
+.search-bar input{border-radius:11px 0 0 11px!important}
+.search-bar .btn{border-radius:0 11px 11px 0!important}
+.news-card{
+  border-radius:18px!important;
+  background:
+    linear-gradient(145deg,rgba(20,29,42,.88),rgba(8,12,19,.92))!important;
+  transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease;
+}
+.news-card:hover{transform:translateY(-5px)!important;border-color:rgba(239,70,81,.42)!important;box-shadow:0 28px 68px rgba(0,0,0,.35)}
+.news-card.hot{background:linear-gradient(145deg,rgba(87,30,39,.48),rgba(8,12,19,.92))!important}
+.news-meta span,.news-card strong{color:#ff8c79!important}
+.article{overflow:hidden}
+.article h1{font-size:clamp(38px,5vw,70px)}
+.article-lead{color:#b5bfcc!important}
+.article-body{color:#c4ccd6!important;line-height:2!important}
+.footer{
+  position:relative;
+  z-index:1;
+  background:rgba(6,9,14,.8)!important;
+  border-top-color:rgba(255,255,255,.11)!important;
+  backdrop-filter:blur(18px);
+}
+.footer-brand strong{color:#aab4c1!important}
+.footer-brand span,.footer-version{color:#6d7b8f!important}
+.social-links a{border-radius:10px!important;background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.12)!important}
+.social-links a:hover{border-color:rgba(239,70,81,.45)!important;color:#fff!important}
+.flash{
+  border-radius:13px!important;
+  background:rgba(11,16,25,.94)!important;
+  border-color:rgba(255,255,255,.15)!important;
+  box-shadow:0 20px 50px rgba(0,0,0,.36)!important;
+  backdrop-filter:blur(16px);
+}
+
+/* #TWOYEARS / reward accents */
+.twoyears-account-card{
+  border-radius:22px!important;
+  background:
+    linear-gradient(100deg,rgba(92,37,45,.55),rgba(15,22,32,.84) 50%,rgba(7,11,18,.9)),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+  box-shadow:var(--v6-shadow);
+}
+.twoyears-account-card-mark,.twoyears-character-banner-icon{
+  border-radius:14px!important;
+  background:linear-gradient(145deg,rgba(239,70,81,.2),rgba(8,12,19,.82))!important;
+}
+.twoyears-page-grid{gap:20px}
+.twoyears-benefits-list{border-radius:14px;overflow:hidden;background:rgba(255,255,255,.08)!important}
+.twoyears-benefits-list>div{background:rgba(8,12,19,.72)!important}
+.twoyears-status-row{border-bottom-color:rgba(255,255,255,.09)!important}
+.twoyears-character-banner{border-radius:17px!important;background:linear-gradient(90deg,rgba(92,37,45,.44),rgba(10,16,24,.9))!important}
+
+/* Admin */
+.admin-actions a{
+  border-radius:18px!important;
+  border-color:rgba(255,255,255,.12)!important;
+  background:linear-gradient(145deg,rgba(20,29,42,.86),rgba(8,12,19,.9))!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.2);
+  transition:.24s ease;
+}
+.admin-actions a:hover{border-color:rgba(239,70,81,.4)!important;box-shadow:0 28px 68px rgba(0,0,0,.34);transform:translateY(-5px)!important}
+.admin-actions a>span{color:#ff907c!important}
+.admin-actions b{color:#ef716d!important}
+
+/* Responsive */
+@media (min-width:851px) and (max-width:1050px){
+  .auth-shell{grid-template-columns:minmax(0,1fr) 430px!important}
+  .auth-story{display:flex!important}
+  .auth-panel{display:grid!important}
+  .auth-story{padding:48px!important}
+  .auth-story h1{font-size:76px}
+}
+@media (max-width:1050px){
+  .page-shell{width:min(100% - 34px,1320px);padding-top:34px}
+  .public-nav{width:min(100% - 34px,1320px)}
+  .public-hero-copy{padding:56px 44px}
+  .v5-dashboard-copy,.v5-profile-copy{padding:44px}
+}
+@media (max-width:850px){
+  .auth-shell{display:block;min-height:auto;margin:0 auto;padding:14px}
+  .auth-story{display:none!important}
+  .auth-panel{min-height:calc(100vh - 28px);border:1px solid rgba(255,255,255,.13);border-radius:22px!important;padding:38px 24px}
+  .mini-brand{margin-bottom:48px}
+}
+@media (max-width:760px){
+  .page-shell{width:min(100% - 24px,1320px);padding-top:28px;padding-bottom:66px}
+  .topbar{height:74px}
+  .public-nav{width:calc(100% - 24px);height:auto;min-height:78px;padding:14px 0}
+  .public-hero,.about-hero{border-radius:22px!important}
+  .public-hero{min-height:0}
+  .public-hero-copy,.about-hero{padding:44px 24px}
+  .public-hero-copy h1{font-size:clamp(52px,16vw,82px)}
+  .public-hero-copy>p{font-size:13px}
+  .public-hero-art{min-height:300px;border-left:0;border-top:1px solid rgba(255,255,255,.13)}
+  .public-content{width:calc(100% - 24px);padding:68px 0}
+  .public-section-head h2{font-size:42px}
+  .v5-dashboard-hero{min-height:0}
+  .v5-dashboard-copy{padding:34px 24px}
+  .v5-dashboard-copy h1,.v5-profile-copy h1{font-size:48px}
+  .v5-dashboard-art{min-height:250px}
+  .v5-profile-copy{padding:34px 24px}
+  .v5-profile-hero{border-radius:22px!important}
+  .v5-profile-portrait{min-height:400px}
+  .page-heading h1{font-size:36px}
+  .heading-actions{width:100%}
+  .heading-actions .btn{flex:1}
+  .stat-grid{gap:10px}
+  .stat-card{min-height:116px;padding:18px}
+  .stat-card strong{font-size:24px}
+  .section-heading h2{font-size:30px}
+  .table-head{display:none}
+  .table-row{grid-template-columns:1fr auto!important;gap:10px;padding:16px}
+  .table-row>div:nth-child(3),.table-row>div:nth-child(4){justify-self:end}
+  .character-row{grid-template-columns:76px minmax(0,1fr) 28px}
+  .row-skin{height:120px}
+  .row-main{padding:14px}
+  .row-main h2{font-size:20px}
+  .row-meta{display:none}
+  .admin-ticket-form{grid-template-columns:1fr!important}
+  .footer{grid-template-columns:1fr;text-align:center;justify-items:center}
+  .footer-version{justify-self:center}
+}
+@media (max-width:520px){
+  .public-links .btn{padding:10px 12px;font-size:9px}
+  .public-brand strong{font-size:12px}
+  .public-brand small{font-size:7px}
+  .public-feature h3,.about-pillar h3{font-size:24px}
+  .public-section-head h2{font-size:36px}
+  .page-heading h1{font-size:32px}
+  .heading-actions{display:grid;grid-template-columns:1fr}
+  .heading-actions .btn{width:100%}
+  .search-bar{display:flex}
+  .search-bar input{min-width:0}
+  .search-bar .btn{padding-inline:12px}
+  .notification-dropdown{right:-44px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
