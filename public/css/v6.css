@@ -912,3 +912,45 @@ input:focus,textarea:focus,select:focus{
   .global-back-app{top:88px}
 }
 
+
+
+/* Landing background — brighter Los Santos atmosphere */
+body:before{
+  background:
+    linear-gradient(180deg,rgba(6,11,22,.02) 0%,rgba(6,11,22,.20) 48%,rgba(5,8,14,.78) 100%),
+    url("../media/lsrp-night.svg") top center / min(1600px,100%) auto no-repeat,
+    radial-gradient(circle at 12% 0%,rgba(239,70,81,.24),transparent 30%),
+    radial-gradient(circle at 82% 18%,rgba(53,158,220,.22),transparent 34%),
+    radial-gradient(circle at 52% 42%,rgba(139,71,205,.12),transparent 38%);
+  opacity:.92;
+}
+body:after{
+  background:
+    radial-gradient(ellipse at center,transparent 44%,rgba(2,4,8,.34) 100%),
+    linear-gradient(90deg,rgba(5,7,12,.12),transparent 24%,transparent 76%,rgba(5,7,12,.16));
+}
+.public-hero{
+  background:
+    linear-gradient(90deg,rgba(10,20,35,.82) 0%,rgba(9,17,31,.52) 52%,rgba(7,12,22,.08) 100%),
+    linear-gradient(180deg,rgba(24,55,94,.12),rgba(7,11,18,.38)),
+    url("../media/lsrp-night.svg") center / cover no-repeat!important;
+}
+.public-hero:before{
+  background:
+    radial-gradient(circle at 70% 30%,rgba(46,164,214,.22),transparent 28%),
+    radial-gradient(circle at 30% 22%,rgba(239,70,81,.18),transparent 27%),
+    linear-gradient(0deg,rgba(7,10,16,.42),transparent 52%);
+}
+.public-hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(110deg,rgba(61,129,190,.16),transparent 58%),radial-gradient(circle at 80% 26%,rgba(255,110,90,.12),transparent 22%);
+  mix-blend-mode:screen;
+}
+.public-hero-art{
+  background:
+    linear-gradient(180deg,rgba(10,18,33,.02),rgba(7,10,16,.42)),
+    url("../media/lsrp-night.svg") right center / cover no-repeat!important;
+}
