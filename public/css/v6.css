@@ -1008,6 +1008,14 @@ body:before{
 .application-server-errors{
   display:grid;
   gap:8px;
+  margin:0 0 24px;
+  padding:18px 20px;
+  border:1px solid rgba(255,91,99,.62);
+  border-left:4px solid var(--v6-red);
+  border-radius:15px;
+  background:linear-gradient(135deg,rgba(89,24,34,.78),rgba(21,17,27,.9));
+  box-shadow:0 16px 34px rgba(0,0,0,.18),0 0 26px rgba(255,75,86,.08);
+  color:#ffe7e4;
 }
 .application-server-errors strong{
   color:#fff;
