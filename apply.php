@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($textLength($strengths) < 20) $errors[] = 'Điểm mạnh cần ít nhất 20 ký tự.';
     if ($textLength($weaknesses) < 20) $errors[] = 'Điểm yếu cần ít nhất 20 ký tự.';
     if ($textLength($concept) < 30) $errors[] = 'Khái quát nhân vật cần ít nhất 30 ký tự.';
-    if ($textLength($concept) > 1000) $errors[] = 'Khái quát nhân vật tối đa 1000 ký tự.';
+    if ($textLength($concept) > 255) $errors[] = 'Khái quát nhân vật tối đa 255 ký tự.';
     if ($textLength($background) < 100) $errors[] = 'Tiểu sử nhân vật cần ít nhất 100 ký tự.';
     if ($textLength($goal) < 50) $errors[] = 'Mục tiêu Roleplay cần ít nhất 50 ký tự.';
     if (!$rulesAgreed) $errors[] = 'Bạn cần xác nhận đã đọc và đồng ý luật Roleplay.';
@@ -179,7 +179,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             '[LSRP UCP][' . $errorReference . '] Character application submit failed for account '
             . (int)current_account_id() . ': ' . $e->getMessage()
         );
-        $errors[] = 'Không thể lưu hồ sơ lúc này. Mã lỗi: ' . $errorReference . '. Hãy gửi mã này cho Ban quản trị.';
+        $sqlState = $e instanceof PDOException ? (string)($e->errorInfo[0] ?? '') : '';
+        if ($sqlState === '22001') {
+            $errors[] = 'Một nội dung vượt quá giới hạn database. Hãy rút gọn phần Khái quát nhân vật còn tối đa 255 ký tự.';
+        } else {
+            $errors[] = 'Không thể lưu hồ sơ lúc này. Mã lỗi: ' . $errorReference . '. Hãy gửi mã này cho Ban quản trị.';
+        }
     }
 }
 
@@ -304,7 +309,7 @@ require __DIR__ . '/partials/header.php';
                     <span>03</span>
                     <div><small>CHARACTER STORY</small><h2>Câu chuyện nhân vật</h2><p>Đây là phần quan trọng nhất để Ban quản trị hiểu hướng Roleplay của bạn.</p></div>
                 </div>
-                <label><span>Khái quát nhân vật</span><textarea name="concept" rows="5" minlength="30" maxlength="1000" required placeholder="Nhân vật là ai, thuộc tầng lớp nào và đang sống như thế nào?"><?= old('concept') ?></textarea></label>
+                <label><span>Khái quát nhân vật</span><textarea name="concept" rows="5" minlength="30" maxlength="255" required placeholder="Nhân vật là ai, thuộc tầng lớp nào và đang sống như thế nào?"><?= old('concept') ?></textarea></label>
                 <label><span>Tiểu sử nhân vật</span><textarea name="background" rows="10" minlength="100" required placeholder="Tuổi thơ, quá trình trưởng thành và những dấu mốc quan trọng trong cuộc đời nhân vật..."><?= old('background') ?></textarea></label>
                 <label><span>Mục tiêu Roleplay</span><textarea name="roleplay_goal" rows="6" minlength="50" required placeholder="Bạn muốn phát triển nhân vật theo hướng nào trong quá trình chơi?"><?= old('roleplay_goal') ?></textarea></label>
             </section>
