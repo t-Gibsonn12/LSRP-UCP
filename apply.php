@@ -31,7 +31,8 @@ for ($i = 1; $i <= (int)$GLOBALS['config']['max_characters']; $i++) {
 $errors = [];
 $requestedSlot = (int)($_GET['slot'] ?? ($_POST['slot'] ?? ($availableSlots[0] ?? 0)));
 $birthDateValue = trim((string)($_POST['birth_date'] ?? ''));
-$maxBirthYear = (int)($GLOBALS['config']['game_year'] ?? date('Y'));
+$maxBirthDate = date('Y-m-d');
+$maxBirthYear = (int)date('Y');
 $minBirthYear = $maxBirthYear - 80;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -77,8 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         || !checkdate($birthMonth, $birthDay, $birthYear)
         || $birthYear < $minBirthYear
         || $birthYear > $maxBirthYear
+        || $birthDate > $maxBirthDate
     ) {
-        $errors[] = 'Vui lòng chọn ngày sinh hợp lệ trong thời kỳ Roleplay.';
+        $errors[] = 'Vui lòng chọn ngày sinh hợp lệ trong khoảng tuổi cho phép.';
     }
 
     if (!in_array($birthPlace, [0, 1, 2, 3], true)) $errors[] = 'Vui lòng chọn nơi sinh.';
@@ -208,7 +210,7 @@ require __DIR__ . '/partials/header.php';
                             <option value="1" <?= (int)($_POST['gender'] ?? -1) === 1 ? 'selected' : '' ?>>Nữ</option>
                         </select>
                     </label>
-                    <label><span>Ngày sinh</span><input type="date" name="birth_date" min="<?= $minBirthYear ?>-01-01" max="<?= $maxBirthYear ?>-12-31" required value="<?= e($birthDateValue) ?>"></label>
+                    <label><span>Ngày sinh</span><input type="date" name="birth_date" min="<?= $minBirthYear ?>-01-01" max="<?= e($maxBirthDate) ?>" required value="<?= e($birthDateValue) ?>"></label>
                     <label><span>Nơi sinh</span>
                         <select name="birth_place" required>
                             <option value="">Chọn nơi sinh</option>
@@ -233,7 +235,7 @@ require __DIR__ . '/partials/header.php';
                 <div class="form-three identity-grid-row">
                     <label><span>Chiều cao (cm)</span><input type="number" name="height_cm" min="130" max="230" placeholder="180" required value="<?= e((string)($_POST['height_cm'] ?? '')) ?>"></label>
                     <label><span>Cân nặng (kg)</span><input type="number" name="weight_kg" min="35" max="220" placeholder="75" required value="<?= e((string)($_POST['weight_kg'] ?? '')) ?>"></label>
-                    <div class="form-field-note"><span>ROLEPLAY STANDARD</span><p>Thông tin cần hợp lý với bối cảnh Los Santos năm 1992.</p></div>
+                    <div class="form-field-note"><span>ROLEPLAY STANDARD</span><p>Thông tin cần hợp lý với bối cảnh Roleplay của máy chủ.</p></div>
                 </div>
             </section>
 
