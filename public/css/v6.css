@@ -974,3 +974,31 @@ body:before{
     linear-gradient(180deg,rgba(10,18,33,.05),rgba(7,10,16,.40)),
     url("../media/lsrp-los-santos-sunset.webp") right center / cover no-repeat!important;
 }
+
+
+/* Identity dossier control surfaces */
+.identity-section .identity-primary-row input,
+.identity-section .identity-primary-row select,
+.identity-section .identity-grid-row input,
+.identity-section .identity-grid-row select{
+  background:transparent!important;
+  border:0!important;
+  border-color:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#f1f4f8!important;
+  color-scheme:dark;
+}
+.identity-section .identity-primary-row input:focus,
+.identity-section .identity-primary-row select:focus,
+.identity-section .identity-grid-row input:focus,
+.identity-section .identity-grid-row select:focus{
+  background:transparent!important;
+  border:0!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+.identity-section .identity-primary-row input::placeholder,
+.identity-section .identity-grid-row input::placeholder{
+  color:#687487!important;
+}
