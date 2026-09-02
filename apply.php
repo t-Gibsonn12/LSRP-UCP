@@ -182,10 +182,18 @@ require __DIR__ . '/partials/header.php';
     <?php if (!$availableSlots): ?>
         <div class="empty-state"><h2>Không còn slot khả dụng.</h2><p>Bạn đã có đủ nhân vật hoặc hồ sơ đang chờ duyệt.</p></div>
     <?php else: ?>
-        <?php foreach ($errors as $error): ?><div class="form-error"><?= e($error) ?></div><?php endforeach; ?>
+        <?php if ($errors): ?>
+            <div class="form-error application-server-errors" role="alert">
+                <strong>Chưa thể gửi hồ sơ.</strong>
+                <ul>
+                    <?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
 
-        <form method="post" class="panel-form application-form">
+        <form method="post" class="panel-form application-form" novalidate>
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+            <div class="application-client-validation" data-application-validation role="alert" hidden></div>
 
             <section class="application-section identity-section">
                 <div class="application-section-heading">
@@ -194,7 +202,7 @@ require __DIR__ . '/partials/header.php';
                 </div>
                 <div class="form-two identity-primary-row">
                     <label class="identity-slot-field"><span>Slot nhân vật</span>
-                        <select name="slot">
+                        <select name="slot" required>
                             <?php foreach ($availableSlots as $availableSlot): ?>
                                 <option value="<?= $availableSlot ?>" <?= $requestedSlot === $availableSlot ? 'selected' : '' ?>>Slot 0<?= $availableSlot ?></option>
                             <?php endforeach; ?>
@@ -289,7 +297,7 @@ require __DIR__ . '/partials/header.php';
                     <div><small>FINAL REVIEW</small><h2>Xác nhận hồ sơ</h2><p>Kiểm tra lại thông tin trước khi gửi cho Ban quản trị.</p></div>
                 </div>
                 <label class="application-check">
-                    <input type="checkbox" name="rules_agreed" value="1" <?= isset($_POST['rules_agreed']) ? 'checked' : '' ?>>
+                    <input type="checkbox" name="rules_agreed" value="1" required <?= isset($_POST['rules_agreed']) ? 'checked' : '' ?>>
                     <span>Tôi xác nhận thông tin trên là đúng và đã đọc, hiểu luật Roleplay của Los Santos.</span>
                 </label>
                 <button class="btn primary application-submit">GỬI HỒ SƠ XÉT DUYỆT <b>→</b></button>
