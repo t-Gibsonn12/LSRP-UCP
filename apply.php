@@ -38,19 +38,28 @@ $minBirthYear = $maxBirthYear - 80;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
 
-    $slot = (int)($_POST['slot'] ?? 0);
+    // Không ép giá trị rỗng của select/số thành 0: 0 là một lựa chọn hợp lệ
+    // ở vài field, nên mọi giá trị thiếu hoặc không phải số phải bị từ chối rõ ràng.
+    $parsePostedInt = static function (mixed $value, int $default = -1): int {
+        if ($value === null) return $default;
+        $value = trim((string)$value);
+        if ($value === '' || !preg_match('/^-?[0-9]+$/', $value)) return $default;
+        return (int)$value;
+    };
+
+    $slot = $parsePostedInt($_POST['slot'] ?? null, 0);
     $name = trim((string)($_POST['character_name'] ?? ''));
-    $gender = (int)($_POST['gender'] ?? -1);
+    $gender = $parsePostedInt($_POST['gender'] ?? null);
     $birthDate = $birthDateValue;
     $birthDay = 0;
     $birthMonth = 0;
     $birthYear = 0;
-    $birthPlace = (int)($_POST['birth_place'] ?? -1);
+    $birthPlace = $parsePostedInt($_POST['birth_place'] ?? null);
     $nationality = trim((string)($_POST['nationality'] ?? ''));
-    $skinTone = (int)($_POST['skin_tone'] ?? -1);
-    $skin = (int)($_POST['skin'] ?? 0);
-    $heightCm = (int)($_POST['height_cm'] ?? 0);
-    $weightKg = (int)($_POST['weight_kg'] ?? 0);
+    $skinTone = $parsePostedInt($_POST['skin_tone'] ?? null);
+    $skin = $parsePostedInt($_POST['skin'] ?? null, 0);
+    $heightCm = $parsePostedInt($_POST['height_cm'] ?? null, 0);
+    $weightKg = $parsePostedInt($_POST['weight_kg'] ?? null, 0);
     $occupation = trim((string)($_POST['occupation'] ?? ''));
     $personality = trim((string)($_POST['personality'] ?? ''));
     $strengths = trim((string)($_POST['strengths'] ?? ''));
@@ -264,7 +273,7 @@ require __DIR__ . '/partials/header.php';
                     <div class="skin-picker-grid" data-skin-grid>
                         <?php foreach ($skinOptions as $skinId => $skinName): ?>
                             <label class="skin-option" data-skin-option data-skin-search-text="<?= e($skinName . ' ' . $skinId) ?>">
-                                <input type="radio" name="skin" value="<?= $skinId ?>" <?= (int)($_POST['skin'] ?? 26) === $skinId ? 'checked' : '' ?>>
+                                <input type="radio" name="skin" value="<?= $skinId ?>" required <?= (int)($_POST['skin'] ?? 26) === $skinId ? 'checked' : '' ?>>
                                 <span class="skin-option-card">
                                     <img loading="lazy" decoding="async" src="<?= e(skin_url($skinId)) ?>" alt="<?= e($skinName) ?>">
                                     <b><?= e($skinName) ?></b><small>#<?= $skinId ?></small>
