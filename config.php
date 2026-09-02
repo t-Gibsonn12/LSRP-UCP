@@ -2,7 +2,6 @@
 return [
     'app_name' => 'Los Santos Roleplay Vietnamese',
     'base_url' => '/lsrp-ucp',
-    'game_year' => 1992,
     'max_characters' => 3,
     'bcrypt_cost' => 12,
 
