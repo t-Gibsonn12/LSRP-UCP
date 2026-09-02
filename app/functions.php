@@ -63,8 +63,15 @@ function samp_skin_options(): array
     static $options = null;
     if (is_array($options)) return $options;
 
+    $excludedIds = array_fill_keys([
+        0, 265, 266, 267,
+        277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288,
+        300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311,
+    ], true);
+
     $options = [];
     for ($id = 0; $id <= 311; $id++) {
+        if (isset($excludedIds[$id])) continue;
         $options[$id] = 'Skin #' . $id;
     }
 
