@@ -4,13 +4,7 @@ require_login();
 
 $pdo = db();
 $applicationsReady = ucp_ensure_character_applications_table();
-$skinOptions = [
-    26 => 'LSRP Classic',
-    30 => 'Street Profile',
-    12 => 'City Profile',
-    105 => 'Gang Profile',
-    169 => 'Urban Profile',
-];
+$skinOptions = samp_skin_options();
 
 $stmt = $pdo->prepare("SELECT slot FROM player_characters WHERE account_id = ?");
 $stmt->execute([current_account_id()]);
@@ -249,18 +243,26 @@ require __DIR__ . '/partials/header.php';
                     <div><small>APPEARANCE & PERSONALITY</small><h2>Ngoại hình & tính cách</h2><p>Chọn diện mạo và mô tả cách nhân vật tồn tại trong thế giới RP.</p></div>
                 </div>
                 <div class="skin-picker">
-                    <div class="field-label-row"><span>Skin nhân vật</span><b>Chọn một diện mạo GTA SA-MP</b></div>
-                    <div class="skin-picker-grid">
+                    <div class="field-label-row"><span>Skin nhân vật</span><b>Đủ bộ skin SA-MP · 0–311</b></div>
+                    <div class="skin-picker-tools">
+                        <label class="skin-search">
+                            <span class="sr-only">Tìm skin</span>
+                            <input type="text" data-skin-search placeholder="Tìm theo model hoặc tên skin..." autocomplete="off">
+                        </label>
+                        <span class="skin-picker-count" data-skin-count><?= count($skinOptions) ?> SKIN</span>
+                    </div>
+                    <div class="skin-picker-grid" data-skin-grid>
                         <?php foreach ($skinOptions as $skinId => $skinName): ?>
-                            <label class="skin-option">
+                            <label class="skin-option" data-skin-option data-skin-search-text="<?= e($skinName . ' ' . $skinId) ?>">
                                 <input type="radio" name="skin" value="<?= $skinId ?>" <?= (int)($_POST['skin'] ?? 26) === $skinId ? 'checked' : '' ?>>
                                 <span class="skin-option-card">
-                                    <img src="<?= e(skin_url($skinId)) ?>" alt="<?= e($skinName) ?>">
+                                    <img loading="lazy" decoding="async" src="<?= e(skin_url($skinId)) ?>" alt="<?= e($skinName) ?>">
                                     <b><?= e($skinName) ?></b><small>MODEL #<?= $skinId ?></small>
                                 </span>
                             </label>
                         <?php endforeach; ?>
                     </div>
+                    <div class="skin-picker-empty" data-skin-empty hidden>Không tìm thấy skin phù hợp.</div>
                 </div>
                 <label><span>Tính cách</span><textarea name="personality" rows="5" minlength="30" required placeholder="Nhân vật cư xử ra sao, giao tiếp thế nào, điều gì chi phối họ?"><?= old('personality') ?></textarea></label>
                 <div class="form-two">
