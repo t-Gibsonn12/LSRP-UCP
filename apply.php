@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parsePostedInt = static function (mixed $value, int $default = -1): int {
         if ($value === null) return $default;
         $value = trim((string)$value);
-        if ($value === '' || !preg_match('/^-?\\d+$/', $value)) return $default;
+        if ($value === '' || !preg_match('/^-?[0-9]+$/', $value)) return $default;
         return (int)$value;
     };
 
