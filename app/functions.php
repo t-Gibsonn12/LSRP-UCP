@@ -58,6 +58,36 @@ function skin_url(int|string|null $skin): string
     return 'https://assets.open.mp/assets/images/skins/' . $id . '.png';
 }
 
+function samp_skin_options(): array
+{
+    static $options = null;
+    if (is_array($options)) return $options;
+
+    $options = [];
+    for ($id = 0; $id <= 311; $id++) {
+        $options[$id] = 'Skin #' . $id;
+    }
+
+    // Giữ tên nhận diện cho các mẫu nổi bật đang có trong form.
+    foreach ([
+        12 => 'City Profile',
+        26 => 'LSRP Classic',
+        30 => 'Street Profile',
+        105 => 'Gang Profile',
+        169 => 'Urban Profile',
+    ] as $id => $name) {
+        $options[$id] = $name;
+    }
+
+    return $options;
+}
+
+function samp_vehicle_image_url(int|string|null $model): string
+{
+    $id = max(400, min(611, (int)$model));
+    return 'https://assets.open.mp/assets/images/vehiclePictures/Vehicle_' . $id . '.jpg';
+}
+
 function character_age(array $character): ?int
 {
     $year = (int)($character['birth_year'] ?? 0);

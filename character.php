@@ -102,7 +102,7 @@ require __DIR__ . '/partials/header.php';
                         <?php foreach ($characterVehicles as $vehicle): ?>
                             <article class="v5-vehicle-card">
                                 <div class="v5-vehicle-image">
-                                    <img loading="lazy" src="https://assets.open.mp/assets/images/vehiclePictures/Vehicle_<?= (int)$vehicle['model'] ?>.jpg" alt="<?= e($vehicle['model_name']) ?>">
+                                    <img loading="lazy" src="<?= e(samp_vehicle_image_url($vehicle['model'])) ?>" alt="<?= e($vehicle['model_name']) ?>">
                                     <?php if ($vehicle['favorite']): ?><span class="badge success v5-vehicle-status">★ FAVORITE</span><?php endif; ?>
                                 </div>
                                 <div class="v5-vehicle-body">

@@ -59,3 +59,32 @@ if (mobileToggle && mainNav) {
         mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 }
+
+
+const skinSearch = document.querySelector('[data-skin-search]');
+const skinOptions = Array.from(document.querySelectorAll('[data-skin-option]'));
+const skinCount = document.querySelector('[data-skin-count]');
+const skinEmpty = document.querySelector('[data-skin-empty]');
+
+if (skinSearch && skinOptions.length) {
+    const updateSkinFilter = () => {
+        const query = skinSearch.value.trim().toLocaleLowerCase();
+        let visibleCount = 0;
+
+        skinOptions.forEach((option) => {
+            const text = (option.dataset.skinSearchText || '').toLocaleLowerCase();
+            const visible = query === '' || text.includes(query);
+            option.hidden = !visible;
+            if (visible) visibleCount += 1;
+        });
+
+        if (skinCount) {
+            skinCount.textContent = query
+                ? `${visibleCount} / ${skinOptions.length} SKIN`
+                : `${skinOptions.length} SKIN`;
+        }
+        if (skinEmpty) skinEmpty.hidden = visibleCount !== 0;
+    };
+
+    skinSearch.addEventListener('input', updateSkinFilter);
+}
