@@ -1002,3 +1002,66 @@ body:before{
 .identity-section .identity-grid-row input::placeholder{
   color:#687487!important;
 }
+
+
+/* Application validation and native select contrast */
+.application-server-errors{
+  display:grid;
+  gap:8px;
+}
+.application-server-errors strong{
+  color:#fff;
+}
+.application-server-errors ul{
+  display:grid;
+  gap:5px;
+  margin:0;
+  padding-left:18px;
+}
+.application-server-errors li{
+  line-height:1.5;
+}
+.application-client-validation{
+  display:grid;
+  gap:7px;
+  margin:20px 34px 0;
+  padding:14px 16px;
+  border:1px solid rgba(255,113,101,.6);
+  border-left:3px solid var(--v6-red);
+  border-radius:13px;
+  background:rgba(88,21,30,.35);
+  color:#ffe1df;
+  font-size:11px;
+  line-height:1.55;
+}
+.application-client-validation[hidden]{
+  display:none;
+}
+.application-client-validation strong{
+  color:#fff;
+  font-size:12px;
+}
+.application-client-validation ul{
+  display:grid;
+  gap:3px;
+  margin:0;
+  padding-left:18px;
+}
+.application-form .client-invalid{
+  border-color:rgba(255,91,99,.9)!important;
+  box-shadow:0 0 0 3px rgba(255,91,99,.12),0 10px 28px rgba(0,0,0,.16)!important;
+}
+.application-form .client-invalid>span{
+  color:#ffaaa4!important;
+}
+.identity-section .identity-primary-row select option,
+.identity-section .identity-grid-row select option{
+  color:#172131!important;
+  background:#f7f8fb!important;
+}
+
+@media(max-width:760px){
+  .application-client-validation{
+    margin:18px 20px 0;
+  }
+}
