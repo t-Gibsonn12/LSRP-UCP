@@ -98,8 +98,19 @@ function samp_vehicle_image_url(int|string|null $model): string
 function character_age(array $character): ?int
 {
     $year = (int)($character['birth_year'] ?? 0);
-    if ($year <= 0) return null;
-    return (int)$GLOBALS['config']['game_year'] - $year;
+    $month = (int)($character['birth_month'] ?? 0);
+    $day = (int)($character['birth_day'] ?? 0);
+
+    if ($year <= 0 || !checkdate($month, $day, $year)) return null;
+
+    try {
+        $birthDate = new DateTimeImmutable(sprintf('%04d-%02d-%02d', $year, $month, $day));
+        $today = new DateTimeImmutable('today');
+        if ($birthDate > $today) return null;
+        return $birthDate->diff($today)->y;
+    } catch (Throwable $e) {
+        return null;
+    }
 }
 
 function gender_name(int|string|null $gender): string
