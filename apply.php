@@ -243,7 +243,7 @@ require __DIR__ . '/partials/header.php';
                     <div><small>APPEARANCE & PERSONALITY</small><h2>Ngoại hình & tính cách</h2><p>Chọn diện mạo và mô tả cách nhân vật tồn tại trong thế giới RP.</p></div>
                 </div>
                 <div class="skin-picker">
-                    <div class="field-label-row"><span>Skin nhân vật</span><b>Đủ bộ skin SA-MP · 0–311</b></div>
+                    <div class="field-label-row"><span>Skin nhân vật</span><b>Danh sách skin SA-MP được phép</b></div>
                     <div class="skin-picker-tools">
                         <label class="skin-search">
                             <span class="sr-only">Tìm skin</span>
