@@ -72,7 +72,7 @@ function samp_skin_options(): array
     $options = [];
     for ($id = 0; $id <= 311; $id++) {
         if (isset($excludedIds[$id])) continue;
-        $options[$id] = 'Skin #' . $id;
+        $options[$id] = '#' . $id;
     }
 
     // Giữ tên nhận diện cho các mẫu nổi bật đang có trong form.

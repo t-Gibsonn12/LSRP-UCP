@@ -185,22 +185,22 @@ require __DIR__ . '/partials/header.php';
         <form method="post" class="panel-form application-form">
             <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
 
-            <section class="application-section">
+            <section class="application-section identity-section">
                 <div class="application-section-heading">
                     <span>01</span>
                     <div><small>IDENTITY DOSSIER</small><h2>Thông tin cơ bản</h2><p>Những dữ liệu nhận diện chính của nhân vật.</p></div>
                 </div>
-                <div class="form-two">
-                    <label><span>Slot nhân vật</span>
+                <div class="form-two identity-primary-row">
+                    <label class="identity-slot-field"><span>Slot nhân vật</span>
                         <select name="slot">
                             <?php foreach ($availableSlots as $availableSlot): ?>
                                 <option value="<?= $availableSlot ?>" <?= $requestedSlot === $availableSlot ? 'selected' : '' ?>>Slot 0<?= $availableSlot ?></option>
                             <?php endforeach; ?>
                         </select>
                     </label>
-                    <label><span>Tên nhân vật</span><input name="character_name" maxlength="24" placeholder="Michael_Johnson" required value="<?= old('character_name') ?>"></label>
+                    <label class="identity-name-field"><span>Tên nhân vật</span><input name="character_name" maxlength="24" placeholder="Michael_Johnson" required value="<?= old('character_name') ?>"></label>
                 </div>
-                <div class="form-three">
+                <div class="form-three identity-grid-row">
                     <label><span>Giới tính</span>
                         <select name="gender" required>
                             <option value="">Chọn giới tính</option>
@@ -218,7 +218,7 @@ require __DIR__ . '/partials/header.php';
                         </select>
                     </label>
                 </div>
-                <div class="form-three">
+                <div class="form-three identity-grid-row">
                     <label><span>Quốc tịch</span><input name="nationality" maxlength="80" placeholder="American" required value="<?= old('nationality') ?>"></label>
                     <label><span>Màu da</span>
                         <select name="skin_tone" required>
@@ -230,7 +230,7 @@ require __DIR__ . '/partials/header.php';
                     </label>
                     <label><span>Nghề nghiệp</span><input name="occupation" maxlength="80" placeholder="Thợ máy, tài xế, sinh viên..." required value="<?= old('occupation') ?>"></label>
                 </div>
-                <div class="form-three">
+                <div class="form-three identity-grid-row">
                     <label><span>Chiều cao (cm)</span><input type="number" name="height_cm" min="130" max="230" placeholder="180" required value="<?= e((string)($_POST['height_cm'] ?? '')) ?>"></label>
                     <label><span>Cân nặng (kg)</span><input type="number" name="weight_kg" min="35" max="220" placeholder="75" required value="<?= e((string)($_POST['weight_kg'] ?? '')) ?>"></label>
                     <div class="form-field-note"><span>ROLEPLAY STANDARD</span><p>Thông tin cần hợp lý với bối cảnh Los Santos năm 1992.</p></div>
@@ -257,7 +257,7 @@ require __DIR__ . '/partials/header.php';
                                 <input type="radio" name="skin" value="<?= $skinId ?>" <?= (int)($_POST['skin'] ?? 26) === $skinId ? 'checked' : '' ?>>
                                 <span class="skin-option-card">
                                     <img loading="lazy" decoding="async" src="<?= e(skin_url($skinId)) ?>" alt="<?= e($skinName) ?>">
-                                    <b><?= e($skinName) ?></b><small>MODEL #<?= $skinId ?></small>
+                                    <b><?= e($skinName) ?></b><small>#<?= $skinId ?></small>
                                 </span>
                             </label>
                         <?php endforeach; ?>
