@@ -310,7 +310,7 @@ require __DIR__ . '/partials/header.php';
                     <div><small>CHARACTER STORY</small><h2>Câu chuyện nhân vật</h2><p>Đây là phần quan trọng nhất để Ban quản trị hiểu hướng Roleplay của bạn.</p></div>
                 </div>
                 <label><span>Khái quát nhân vật</span><textarea name="concept" rows="5" minlength="30" maxlength="255" required placeholder="Nhân vật là ai, thuộc tầng lớp nào và đang sống như thế nào?"><?= old('concept') ?></textarea></label>
-                <label><span>Tiểu sử nhân vật</span><textarea name="background" rows="10" minlength="100" required placeholder="Tuổi thơ, quá trình trưởng thành và những dấu mốc quan trọng trong cuộc đời nhân vật..."><?= old('background') ?></textarea></label>
+                <label><span>Tiểu sử nhân vật <small class="field-requirement">Tối thiểu 100 ký tự</small></span><textarea name="background" rows="10" minlength="100" required placeholder="Tuổi thơ, quá trình trưởng thành và những dấu mốc quan trọng trong cuộc đời nhân vật..."><?= old('background') ?></textarea></label>
                 <label><span>Mục tiêu Roleplay</span><textarea name="roleplay_goal" rows="6" minlength="50" required placeholder="Bạn muốn phát triển nhân vật theo hướng nào trong quá trình chơi?"><?= old('roleplay_goal') ?></textarea></label>
             </section>
 
