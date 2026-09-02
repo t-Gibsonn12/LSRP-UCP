@@ -103,7 +103,7 @@ require __DIR__ . '/partials/header.php';
 
             <form method="post" class="form-grid auth-form" autocomplete="on">
                 <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
-                <label><span>Tên Master Account</span><input name="username" required maxlength="24" autocomplete="username" value="<?= old('username') ?>" placeholder="duy_1992"><small>3-24 ký tự, chữ/số/dấu gạch dưới.</small></label>
+                <label><span>Tên Master Account</span><input name="username" required maxlength="24" autocomplete="username" value="<?= old('username') ?>" placeholder="duy_player"><small>3-24 ký tự, chữ/số/dấu gạch dưới.</small></label>
                 <label><span>Email</span><input type="email" name="email" required maxlength="190" autocomplete="email" value="<?= old('email') ?>" placeholder="you@example.com"><small>Chưa cần xác nhận email ở phiên bản này.</small></label>
                 <label><span>Mật khẩu</span><input type="password" name="password" minlength="6" required autocomplete="new-password" placeholder="Tối thiểu 6 ký tự"></label>
                 <label><span>Xác nhận mật khẩu</span><input type="password" name="confirm_password" minlength="6" required autocomplete="new-password" placeholder="Nhập lại mật khẩu"></label>
