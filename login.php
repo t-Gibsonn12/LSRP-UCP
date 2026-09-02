@@ -26,7 +26,7 @@ require __DIR__ . '/partials/header.php';
     <section class="auth-story">
         <div class="city-grid"></div>
         <div class="auth-story-content">
-            <div class="eyebrow">LOS SANTOS · SAN ANDREAS · 1992</div>
+            <div class="eyebrow">LOS SANTOS · SAN ANDREAS · HEAVY ROLEPLAY</div>
             <h1><span>#TWO</span><br>YEARS</h1>
             <p class="story-copy">Two Years to back</p>
 
@@ -48,7 +48,7 @@ require __DIR__ . '/partials/header.php';
             </a>
             <?php else: ?>
             <div class="hot-news-card muted-card">
-                <div class="hot-news-meta"><strong>HOT NEWS</strong><span>LOS SANTOS · 1992</span></div>
+                <div class="hot-news-meta"><strong>HOT NEWS</strong><span>LOS SANTOS · ROLEPLAY</span></div>
                 <h2>#TWO YEARS — Chặng đường tiếp theo</h2>
                 <p>Tin nổi bật sẽ xuất hiện tại đây sau khi Ban quản trị đăng bài đầu tiên.</p>
             </div>
