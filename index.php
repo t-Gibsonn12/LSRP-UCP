@@ -25,7 +25,7 @@ require __DIR__ . '/partials/header.php';
 <main>
     <section class="public-hero">
         <div class="public-hero-copy">
-            <span class="eyebrow">LOS SANTOS · 1992 · HEAVY ROLEPLAY</span>
+            <span class="eyebrow">LOS SANTOS · HEAVY ROLEPLAY</span>
             <h1>Sống một<br><span>cuộc đời khác.</span></h1>
             <p>Los Santos Roleplay Vietnamese là không gian nhập vai tập trung vào danh tính nhân vật, câu chuyện dài hạn và những lựa chọn có hậu quả. UCP là trung tâm quản lý Master Account, hồ sơ nhân vật và toàn bộ dữ liệu gắn với cuộc sống Roleplay của bạn.</p>
             <div class="public-hero-actions">
