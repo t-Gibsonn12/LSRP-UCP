@@ -2,7 +2,7 @@
 <footer class="footer">
     <div class="footer-brand">
         <strong>LOS SANTOS ROLEPLAY VIETNAMESE</strong>
-        <span>Heavy Roleplay Experience · Los Santos, 1992</span>
+        <span>Heavy Roleplay Experience · Los Santos</span>
         <a href="<?= e(url('about.php')) ?>" style="display:inline-block;margin-top:8px;font-size:11px;color:#aeb5c1">GIỚI THIỆU LSRP →</a>
     </div>
 

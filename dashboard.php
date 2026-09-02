@@ -97,7 +97,7 @@ require __DIR__ . '/partials/header.php';
                             <span class="v5-char-state v5-char-state-empty"><i></i>AVAILABLE</span>
                         </div>
                         <span class="v5-empty-watermark">LSRP</span>
-                        <span class="v5-empty-tag">LOS SANTOS · 1992</span>
+                        <span class="v5-empty-tag">LOS SANTOS · ROLEPLAY</span>
                         <img src="<?= e(skin_url($emptySkin)) ?>" alt="Nhân vật gợi ý cho Character 0<?= $slot ?>" loading="lazy">
                     </div>
                     <div class="v5-char-body v5-empty-body">
